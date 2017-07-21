@@ -1,5 +1,8 @@
 #include <emp-tool>
 #include "malicious/malicious.h"
+
+#define SERVER_IP  "127.0.0.1"
+
 #define AES
 #ifdef AES
 static char file[] = "circuits/files/AES-non-expanded.txt";

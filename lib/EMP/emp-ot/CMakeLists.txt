@@ -3,7 +3,7 @@ project (emp-ot)
 set(NAME "emp-ot")
 
 if(POLICY CMP0042)
-  cmake_policy(SET CMP0042 NEW) # necessary to use rpath on macOS
+  cmake_policy(SET CMP0042 NEW) # use rpath on macOS
 endif()
 
 include_directories(${CMAKE_SOURCE_DIR})
@@ -19,8 +19,8 @@ set(CMAKE_BUILD_TYPE Release)
 endif(NOT CMAKE_BUILD_TYPE)
 message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
-FIND_PACKAGE(emp-tool)
-INCLUDE_DIRECTORIES(${EMP-TOOL_INCLUDE_DIRS})
+find_package(emp-tool REQUIRED)
+include_directories(${EMP-TOOL_INCLUDE_DIRS})
 
 macro (add_test _name)
 	add_executable(${_name} "test/${_name}.cpp" ${sources})

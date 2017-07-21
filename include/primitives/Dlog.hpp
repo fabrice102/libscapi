@@ -640,9 +640,9 @@ public:
 	int getK1() override { return k; }
 
 	string toString() override {
-		string s = "ECF2mTrinomialBasis [k=" + k;
-		s += ", m=" + m;
-		s+= ", a=" + (string)a + ", b="	+ (string) b + ", xG=" + (string) xG + ", yG=" + (string) yG + ", h=" + (string) h + ", q=" + (string) q + "]";
+		string s = string("ECF2mTrinomialBasis [k=") + to_string(k);
+		s += string(", m=") + to_string(m);
+		s += ", a=" + (string)a + ", b="	+ (string) b + ", xG=" + (string) xG + ", yG=" + (string) yG + ", h=" + (string) h + ", q=" + (string) q + "]";
 		return s;
 	}
 };

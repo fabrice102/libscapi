@@ -7,6 +7,7 @@
 #include "utils.h"
 #include "prp.h"
 #include "hash.h"
+#include "garble_circuit.h"
 #include "garble/garble_gate_halfgates.h"
 #include <iostream>
 
@@ -33,7 +34,9 @@ class HalfGateGen:public GarbleCircuit{ public:
 	T * io;
 	Hash hash;
 	bool with_file_io = false;
+	block fix_point;
 	HalfGateGen(T * io) :io(io) {
+		PRG prg(fix_key);prg.random_block(&fix_point, 1);
 		PRG tmp;
 		tmp.random_block(&seed, 1);
 		block a;
@@ -54,6 +57,11 @@ class HalfGateGen:public GarbleCircuit{ public:
 	block public_label_impl(bool b) {
 		return b? one_block() : zero_block();
 	}
+	bool isDelta(const block & b) {
+		__m128i neq = _mm_xor_si128(b, delta);
+		return _mm_testz_si128(neq, neq);
+	}
+
 	block gen_and(const block& a, const block& b) {
 		block out[2], table[2];
 		if (isZero(&a) or isZero(&b)) {
@@ -63,7 +71,7 @@ class HalfGateGen:public GarbleCircuit{ public:
 		} else if (isOne(&b)){
 			return a;
 		} else {
-			garble_gate_garble_halfgates(GARBLE_GATE_AND, a, xorBlocks(a,delta), b, xorBlocks(b,delta), 
+			garble_gate_garble_halfgates(a, xorBlocks(a,delta), b, xorBlocks(b,delta), 
 					&out[0], &out[1], delta, table, gid++, prp.aes);
 			io->send_block(table, 2);
 			return out[0];
@@ -74,8 +82,19 @@ class HalfGateGen:public GarbleCircuit{ public:
 			return gen_not(b);
 		else if (isOne(&b))
 			return gen_not(a);
-		else
-			return xorBlocks(a, b);
+		else if (isZero(&a))
+			return b;
+		else if (isZero(&b))
+			return a;
+		else {
+			block res = xorBlocks(a, b);
+			if (isZero(&res))
+				return fix_point;
+			if (isDelta(res))
+				return xorBlocks(fix_point, delta);
+			else
+				return res;//xorBlocks(a, b);
+		}
 	}
 	block gen_not(const block&a) {
 		if (isZero(&a))
@@ -138,7 +157,7 @@ class HalfGateGen<T,RTCktOpt::off>:public GarbleCircuit{ public:
 	}
 	block gen_and(const block& a, const block& b) {
 		block out[2], table[2];
-		garble_gate_garble_halfgates(GARBLE_GATE_AND, a, xorBlocks(a,delta), b, xorBlocks(b,delta), 
+		garble_gate_garble_halfgates(a, xorBlocks(a,delta), b, xorBlocks(b,delta), 
 				&out[0], &out[1], delta, table, gid++, prp.aes);
 		io->send_block(table, 2);
 		return out[0];

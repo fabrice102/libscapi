@@ -3,11 +3,10 @@
 #include <string>
 #include "block.h"
 #include <sstream>
-#include <bitset>
 #include <cstddef>//https://gcc.gnu.org/gcc-4.9/porting_to.html
 #include <gmp.h>
-#include "config.h"
 #include "prg.h"
+#include <chrono>
 #define macro_xstr(a) macro_str(a)
 #define macro_str(a) #a
 
@@ -35,7 +34,14 @@ template<class... Ts>
 void run_function(void *function, const Ts&... args) {	
 	reinterpret_cast<void(*)(Ts...)>(function)(args...);
 }
-void parse_party_and_port(char ** arg, int * party, int * port);
+
+void inline parse_party_and_port(char ** arg, int argc, int * party, int * port);
+
+//deprecate soon
+void inline parse_party_and_port(char ** arg, int * party, int * port) {
+	parse_party_and_port(arg, 2, party, port);
+}
+
 std::string Party(int p);
 template <typename T = uint64_t>
 std::string m128i_to_string(const __m128i var) {
@@ -46,8 +52,13 @@ std::string m128i_to_string(const __m128i var) {
 	}
 	return sstr.str();
 }
-double wallClock();
-uint64_t timeStamp();
+
+inline std::chrono::time_point<std::chrono::high_resolution_clock> clock_start() { 
+	return std::chrono::high_resolution_clock::now();
+}
+inline long long time_from(const std::chrono::time_point<std::chrono::high_resolution_clock>& s) {
+	return std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::high_resolution_clock::now() - s).count();
+}
 template<typename T>
 T bool_to_int(const bool * data, size_t len = 0);
 block bool_to128(const bool * data);

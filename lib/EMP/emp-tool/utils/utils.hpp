@@ -28,7 +28,9 @@ inline std::string hex_to_binary(std::string hex) {
 		bin += hex_char_to_bin(hex[i]);
 	return bin;
 }
-inline void parse_party_and_port(char ** arg, int * party, int * port) {
+inline void parse_party_and_port(char ** arg, int argc, int * party, int * port) {
+	if (argc == 1)
+		error("ERROR: argc = 1, need two argsm party ID {1,2} and port.");
 	*party = atoi (arg[1]);
 	*port = atoi (arg[2]);
 }
@@ -39,17 +41,6 @@ inline std::string Party(int p) {
 	else if (p == BOB)
 		return "BOB";
 	else return "PUBLIC";
-}
-
-inline uint64_t timeStamp() {
-	struct timespec t;
-	clock_gettime(CLOCK_REALTIME,&t);
-	return (t.tv_sec*1000*1000+t.tv_nsec/1000);
-}
-inline double wallClock() {
-	struct timespec t;
-	clock_gettime(CLOCK_REALTIME,&t);
-	return t.tv_sec+1e-9*t.tv_nsec;
 }
 
 template<typename t>

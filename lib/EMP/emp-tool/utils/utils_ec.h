@@ -1,26 +1,25 @@
 #ifndef UTILS_EC_H__
 #define UTILS_EC_H__
+
 extern "C" {
 #include <relic/relic.h>
 }
 #include "block.h"
-
 #include "hash.h"
 #define ECC_PACK false
 #define BIT_LEN 128
 #define EB_SIZE 65
 
-
 typedef eb_t eb_tpl[2];
 typedef bn_t bn_tpl[2];
 
-#define __batch(func, ...)\
+#define __batch(func)\
 	template <typename H, typename... T> void func##l(H p, T... t) {\
-		func(p,##__VA_ARGS__);\
+		func(p);\
 		func##l(t...);\
 	}\
 	template <typename H> void func##l(H p) {\
-		func(p,##__VA_ARGS__);\
+		func(p);\
 	}
 
 __batch(eb_new);

@@ -7,15 +7,26 @@ include_directories(${CMAKE_SOURCE_DIR}/io)
 include_directories(${CMAKE_SOURCE_DIR}/utils)
 include_directories(${CMAKE_SOURCE_DIR}/circuits)
 include_directories(${CMAKE_SOURCE_DIR}/gc)
+include_directories(${CMAKE_SOURCE_DIR}/plain)
+
+if(NOT CMAKE_BUILD_TYPE)
+set(CMAKE_BUILD_TYPE Release)
+endif(NOT CMAKE_BUILD_TYPE)
+message(STATUS "Build type: ${CMAKE_BUILD_TYPE}")
 
 set( CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin )
+set(CMAKE_PREFIX_PATH ${CMAKE_PREFIX_PATH} ${CMAKE_SOURCE_DIR})
 
-FIND_PACKAGE(OpenSSL)
+find_package(OpenSSL)
+find_package(relic)
 INCLUDE_DIRECTORIES(${OPENSSL_INCLUDE_DIR})
 
-set (CMAKE_C_FLAGS "-pthread -Wall -march=native -O3 -maes")
-#set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -pg -ggdb")
-set (CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c++0x")
+set (CMAKE_C_FLAGS "-pthread -Wall -march=native -O1 -maes")
+set (CMAKE_CXX_FLAGS "${CMAKE_C_FLAGS} -std=c++11")
+
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -ggdb")
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
+
 
 file(GLOB headers 
 "io/*.h"
@@ -40,14 +51,24 @@ gc/backend.cpp
 )
 add_library(${NAME} SHARED ${sources})
 
-install(FILES emp-tool-config.cmake DESTINATION cmake/)
+install(FILES emp-tool-config.cmake relic-config.cmake DESTINATION cmake/)
 install(FILES ${headers} DESTINATION include/${NAME})
 install(FILES ${libgarble} DESTINATION include/${NAME}/garble)
 install(FILES ${circuit-files} DESTINATION include/${NAME}/files)
 install(TARGETS ${NAME} DESTINATION lib)
+
 macro (add_test _name)
-	add_executable("test_${_name}" "test/${_name}.cpp" ${basics} "gc/backend.cpp")
-	target_link_libraries("test_${_name}"  relic  ${OPENSSL_LIBRARIES} gmp ${EMP-TOOL_LIBRARIES}) 
+	add_executable(${_name} "test/${_name}.cpp" ${sources})
+	target_link_libraries(${_name}  ${RELIC_LIBRARIES} ${OPENSSL_LIBRARIES} gmp) 
 endmacro()
+
+add_test(prg)
+add_test(hash)
+add_test(prp)
+add_test(com)
+add_test(netio)
 add_test(bit)
-add_test(gen_circuit)
+add_test(int)
+add_test(float)
+add_test(garble)
+#add_test(gen_circuit)

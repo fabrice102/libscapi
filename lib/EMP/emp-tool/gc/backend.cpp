@@ -1,4 +1,7 @@
 #include "backend.h"
+#include "prg.h"
+
+PRG * rnd = nullptr;
 
 #ifdef THREADING
 __thread Backend* local_backend = nullptr;
@@ -7,12 +10,4 @@ __thread GarbleCircuit* local_gc = nullptr;
 Backend* local_backend = nullptr;
 GarbleCircuit* local_gc = nullptr;
 #endif
-
-
-int greatestPowerOfTwoLessThan(int n) {
-	int k = 1;
-	while (k < n)
-		k = k << 1;
-	return k >> 1;
-}
 

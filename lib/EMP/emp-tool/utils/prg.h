@@ -4,39 +4,34 @@
 #include "garble/aes.h"
 #include "config.h"
 #include "utils_ec.h"
-#include <stdio.h>
-#include <stdarg.h>
 #include <gmp.h>
+#include <random>
 /** @addtogroup BP
-    @{
-  */
+  @{
+ */
 
 class PRG;
-static PRG * rnd = nullptr;
+extern PRG * rnd;
 class PRG { public:
 	uint64_t counter = 0;
 	AES_KEY aes;
 	PRG(const void * seed = nullptr, int id = 0) {
-		if(rnd == nullptr) {
-			char data[16];
-			FILE *fp;
-			fp = fopen("/dev/urandom", "r");
-			int r_bytes = 0;
-			while (r_bytes < 16) {
-				int r = fread(&data, 1, 16, fp);
-				if (r < 0) exit(1);
-				r_bytes+=r;
-			}
-			fclose(fp);
-			rnd = this;//make rnd not nullptr, to avoiding infinite recursion.
+		if (seed != nullptr) {
+			reseed(seed, id);
+		} else if(rnd == nullptr) {
+			int data[sizeof(block) / sizeof(int)];
+			// this will be "/dev/urandom" when possible...
+			std::random_device rand_div;
+			for (size_t i = 0; i < sizeof(block) / sizeof(int); ++i)
+				data[i] = rand();//_div();
+			reseed(data);
+			random_data((void*)data, 4);
 			rnd = new PRG(data);
-		}
-		if (seed == nullptr) {
+		} else {
 			block data;
 			rnd->random_block(&data, 1);
 			reseed(&data, id);
-		} else
-			reseed(seed, id);
+		}
 	}
 	void reseed(const void * key, uint64_t id = 0) {
 		const char * k = (const char *)key;
@@ -54,12 +49,14 @@ class PRG { public:
 			memcpy((nbytes/16*16)+(char *) data, &extra, nbytes%16);
 		}
 	}
+
 	void random_bool(bool * data, int length) {
 		uint8_t * uint_data = (uint8_t*)data;
 		random_data(uint_data, length);
 		for(int i = 0; i < length; ++i)
 			data[i] = uint_data[i] & 1;
 	}
+
 	void random_data_unaligned(void *data, int nbytes) {
 		block tmp[AES_BATCH_SIZE];
 		for(int i = 0; i < nbytes/(AES_BATCH_SIZE*16); i++) {
@@ -141,20 +138,15 @@ class PRG { public:
 		int nbytes = (nbits+1)/8;
 		uint8_t * data = new uint8_t[nbytes+16];
 		random_data(data, nbytes+16);
-		int n = nbytes;
-		for(int i = 3; i >= 0; i--) {
-			data[i] = (unsigned char) (n % (1 << 8));
-			n /= (1 << 8);
-		}
-		FILE *fp = fmemopen(data, nbytes+16, "rb");
-		int res = mpz_inp_raw(out, fp);
-		assert(res != 0);
+		data[0] %= (1 << (nbits % 8));
+		mpz_import(out, nbytes, 1, 1, 0, 0, data);
 	}
+
 	void random_mpz(mpz_t rop, const mpz_t n) {
-		unsigned long size = mpz_sizeinbase(n, 2);
-		while(1) {
-			random_mpz(rop, size);
-			if(mpz_cmp(rop, n) < 0) {
+		auto size = mpz_sizeinbase(n, 2);
+		while (1) {
+			random_mpz(rop, (int)size);
+			if (mpz_cmp(rop, n) < 0) {
 				break;
 			}
 		}

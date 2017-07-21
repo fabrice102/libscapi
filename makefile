@@ -4,10 +4,30 @@ export prefix=$(abspath ./install)
 CXX=g++
 uname_S := $(shell sh -c 'uname -s 2>/dev/null || echo not')
 ARCH := $(shell getconf LONG_BIT)
+
+OS := $(shell uname -s)
+
+ifeq ($(OS),Darwin)
+SHARED_LIB_EXT:=.dylib
+SHARED_LIB_OPT:=-dynamiclib
+else
 SHARED_LIB_EXT:=.so
-INCLUDE_ARCHIVES_START = -Wl,-whole-archive # linking options, we prefer our generated shared object will be self-contained.
-INCLUDE_ARCHIVES_END = -Wl,-no-whole-archive 
 SHARED_LIB_OPT:=-shared
+endif
+
+# Linking options, we prefer our generated shared object will be self-contained.
+ifeq ($(OS),Darwin)
+# Mac OS flags
+# unfortunately Mac OS does not support the equivalent of -no-whole-archive
+# so archives might be bigger than expected
+INCLUDE_ARCHIVES_START = -Wl,-all_load
+INCLUDE_ARCHIVES_END = 
+else
+# Linux flagscheck for Linux and run other commands
+INCLUDE_ARCHIVES_START = -Wl,-whole-archive 
+INCLUDE_ARCHIVES_END = -Wl,-no-whole-archive 
+endif
+
 
 export uname_S
 export ARCH

@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -28,11 +28,8 @@
  * @ingroup eb
  */
 
-#include "string.h"
-
 #include "relic_core.h"
 #include "relic_fb_low.h"
-#include "relic_eb.h"
 
 /*============================================================================*/
 /* Private definitions                                                        */
@@ -63,7 +60,7 @@ static void eb_mul_ltnaf_imp(eb_t r, const eb_t p, const bn_t k) {
 
 	TRY {
 		/* Prepare the precomputation table. */
-		for (int i = 0; i < (1 << (EB_WIDTH - 2)); i++) {
+		for (i = 0; i < (1 << (EB_WIDTH - 2)); i++) {
 			eb_null(t[i]);
 			eb_new(t[i]);
 		}
@@ -81,7 +78,7 @@ static void eb_mul_ltnaf_imp(eb_t r, const eb_t p, const bn_t k) {
 			eb_neg(r, t[-n / 2]);
 		}
 
-		for (int i = l - 2; i >= 0; i--) {
+		for (i = l - 2; i >= 0; i--) {
 			eb_frb(r, r);
 
 			n = tnaf[i];
@@ -122,7 +119,7 @@ static void eb_mul_ltnaf_imp(eb_t r, const eb_t p, const bn_t k) {
  * @param[in] k					- the integer.
  */
 static void eb_mul_lnaf_imp(eb_t r, const eb_t p, const bn_t k) {
-	int l, i, n;
+	int i, l, n;
 	int8_t naf[FB_BITS + 1];
 	eb_t t[1 << (EB_WIDTH - 2)];
 
@@ -192,7 +189,7 @@ static void eb_mul_lnaf_imp(eb_t r, const eb_t p, const bn_t k) {
  * @param[in] k					- the integer.
  */
 static void eb_mul_rtnaf_imp(eb_t r, const eb_t p, const bn_t k) {
-	int l, i, n;
+	int i, l, n;
 	int8_t tnaf[FB_BITS + 8], u;
 	eb_t t[1 << (EB_WIDTH - 2)];
 
@@ -491,7 +488,7 @@ static void eb_mul_rtnaf_imp(eb_t r, const eb_t p, const bn_t k) {
  * @param[in] k					- the integer.
  */
 static void eb_mul_rnaf_imp(eb_t r, const eb_t p, const bn_t k) {
-	int l, i, n;
+	int i, l, n;
 	int8_t naf[FB_BITS + 1];
 	eb_t t[1 << (EB_WIDTH - 2)];
 
@@ -874,7 +871,7 @@ void eb_mul_rwnaf(eb_t r, const eb_t p, const bn_t k) {
 #if EB_MUL == HALVE || !defined(STRIP)
 
 void eb_mul_halve(eb_t r, const eb_t p, const bn_t k) {
-	int l, i, j, trc, cof;
+	int i, j, l, trc, cof;
 	int8_t naf[FB_BITS + 1] = { 0 }, *_k;
 	eb_t q, s, t[1 << (EB_WIDTH - 2)];
 	bn_t n, m;

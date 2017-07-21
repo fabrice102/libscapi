@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -23,64 +23,27 @@
 /**
  * @file
  *
- * Implementation of the low-level multiple precision bit shifting functions.
+ * Implementation of the low-level extension field modular reduction functions.
  *
- * @ingroup bn
+ * @ingroup fpx
  */
 
-#include <gmp.h>
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-
-#include "relic_bn.h"
-#include "relic_bn_low.h"
+#include "relic_core.h"
+#include "relic_fp_low.h"
+#include "relic_fpx_low.h"
 
 /*============================================================================*/
 /* Public definitions                                                         */
 /*============================================================================*/
 
-dig_t bn_lsh1_low(dig_t *c, const dig_t *a, int size) {
-	return mpn_lshift(c, a, size, 1);
-}
-
-dig_t bn_lshb_low(dig_t *c, const dig_t *a, int size, int bits) {
-	return mpn_lshift(c, a, size, bits);
-}
-
-void bn_lshd_low(dig_t *c, const dig_t *a, int size, int digits) {
-	dig_t *top;
-	const dig_t *bot;
-	int i;
-
-	top = c + size + digits - 1;
-	bot = a + size - 1;
-
-	for (i = 0; i < size; i++, top--, bot--) {
-		*top = *bot;
-	}
-	for (i = 0; i < digits; i++, c++) {
-		*c = 0;
-	}
-}
-
-dig_t bn_rsh1_low(dig_t *c, const dig_t *a, int size) {
-	return mpn_rshift(c, a, size, 1);
-}
-
-dig_t bn_rshb_low(dig_t *c, const dig_t *a, int size, int bits) {
-	return mpn_rshift(c, a, size, bits);
-}
-
-void bn_rshd_low(dig_t *c, const dig_t *a, int size, int digits) {
-	const dig_t *top;
-	dig_t *bot;
-	int i;
-
-	top = a + digits;
-	bot = c;
-
-	for (i = 0; i < size - digits; i++, top++, bot++) {
-		*bot = *top;
-	}
+void fp3_rdcn_low(fp3_t c, dv3_t a) {
+#if FP_RDC == MONTY
+	fp_rdcn_low(c[0], a[0]);
+	fp_rdcn_low(c[1], a[1]);
+	fp_rdcn_low(c[2], a[2]);
+#else
+	fp_rdc(c[0], a[0]);
+	fp_rdc(c[1], a[1]);
+	fp_rdc(c[2], a[2]);
+#endif
 }

@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -216,7 +216,7 @@ void md_kdf2(uint8_t *key, int key_len, const uint8_t *in, int in_len);
 void md_mgf1(uint8_t *mask, int mask_len, const uint8_t *in, int in_len);
 
 /**
- * Computes a Message Authentication Code through RELIC_HMAC.
+ * Computes a Message Authentication Code through HMAC.
  *
  * @param[out] mac				- the authentication.
  * @param[in] in				- the date to authenticate.

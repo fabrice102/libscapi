@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -118,7 +118,7 @@ void fp2_norm_low(fp2_t c, fp2_t a) {
 				fp2_mul_art(c, a);
 				break;
 			case 7:
-				/* If p = 7 mod 8, we choose (4 + u) as QNR/CNR. */
+				/* If p = 7 mod 8, we choose (2 + u) as QNR/CNR. */
 				fp2_mul_art(t, a);
 				fp2_dbl(c, a);
 				fp2_dbl(c, c);

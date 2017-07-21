@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -169,7 +169,7 @@ enum {
  * Represents a binary field element.
  */
 #if ALLOC == AUTO
-typedef align dig_t fb_t[FB_DIGS + PADDING(FB_BYTES)/(FB_DIGIT / 8)];
+typedef relic_align dig_t fb_t[FB_DIGS + PADDING(FB_BYTES)/(FB_DIGIT / 8)];
 #else
 typedef dig_t *fb_t;
 #endif
@@ -177,7 +177,7 @@ typedef dig_t *fb_t;
 /**
  * Represents a binary field element with automatic memory allocation.
  */
-typedef align dig_t fb_st[FB_DIGS + PADDING(FB_BYTES)/(FB_DIGIT / 8)];
+typedef relic_align dig_t fb_st[FB_DIGS + PADDING(FB_BYTES)/(FB_DIGIT / 8)];
 
 /*============================================================================*/
 /* Macro definitions                                                          */
@@ -257,8 +257,8 @@ typedef align dig_t fb_st[FB_DIGS + PADDING(FB_BYTES)/(FB_DIGIT / 8)];
  */
 #if FB_SQR == BASIC
 #define fb_sqr(C, A)	fb_sqr_basic(C, A)
-#elif FB_SQR == RELIC_TABLE
-#define fb_sqr(C, A)	fb_sqr_table(C, A)
+#elif FB_SQR == LUTBL
+#define fb_sqr(C, A)	fb_sqr_lutbl(C, A)
 #elif FB_SQR == INTEG
 #define fb_sqr(C, A)	fb_sqr_integ(C, A)
 #endif
@@ -632,7 +632,7 @@ int fb_size_str(const fb_t a, int radix);
  * @param[in] str			- the string.
  * @param[in] len			- the size of the string.
  * @param[in] radix			- the radix.
- * @throw ERR_NO_VALID		- if the radix is invalid. 
+ * @throw ERR_NO_VALID		- if the radix is invalid.
  * @throw ERR_NO_BUFFER		- if the string is too long.
  */
 void fb_read_str(fb_t a, const char *str, int len, int radix);
@@ -645,7 +645,7 @@ void fb_read_str(fb_t a, const char *str, int len, int radix);
  * @param[in] len			- the buffer capacity.
  * @param[in] a				- the binary field element to write.
  * @param[in] radix			- the radix.
- * @throw ERR_NO_VALID		- if the radix is invalid. 
+ * @throw ERR_NO_VALID		- if the radix is invalid.
  * @throw ERR_NO_BUFFER		- if the buffer capacity is insufficient.
  */
 void fb_write_str(char *str, int len, const fb_t a, int radix);
@@ -656,7 +656,7 @@ void fb_write_str(char *str, int len, const fb_t a, int radix);
  * @param[out] a			- the result.
  * @param[in] bin			- the byte vector.
  * @param[in] len			- the buffer capacity.
- * @throw ERR_NO_BUFFER		- if the buffer capacity is not FP_BYTES. 
+ * @throw ERR_NO_BUFFER		- if the buffer capacity is not FP_BYTES.
  */
 void fb_read_bin(fb_t a, const uint8_t *bin, int len);
 
@@ -813,7 +813,7 @@ void fb_sqr_integ(fb_t c, const fb_t a);
  * @param[out] c			- the result.
  * @param[in] a				- the binary field element to square.
  */
-void fb_sqr_table(fb_t c, const fb_t a);
+void fb_sqr_lutbl(fb_t c, const fb_t a);
 
 /**
  * Shifts a binary field element to the left. Computes c = a * z^bits mod f(z).

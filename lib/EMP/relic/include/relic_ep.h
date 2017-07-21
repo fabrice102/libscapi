@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -90,6 +90,12 @@ enum {
 	BN_P254,
 	/** Barreto-Naehrig curve with negative x. */
 	BN_P256,
+	/** Barreto-Lynn-Scott curve with embedding degree 12. */
+	B12_P381,
+	/** Barreto-Naehrig curve with negative x. */
+	BN_P382,
+	/** Barreto-Lynn-Scott curve with embedding degree 12. */
+	B12_P455,
 	/** Barreto-Lynn-Scott curve with embedding degree 24. */
 	B24_P477,
 	/** Kachisa-Schafer-Scott with negative x. */

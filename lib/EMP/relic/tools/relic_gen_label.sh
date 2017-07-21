@@ -3,7 +3,7 @@
 cat << PREAMBLE
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -36,7 +36,7 @@ cat << PREAMBLE
 
 #include "relic_conf.h"
 
-#define PREFIX(F)			_PREFIX(LABEL, F)
+#define PREFIX(F)		_PREFIX(LABEL, F)
 #define _PREFIX(A, B)		__PREFIX(A, B)
 #define __PREFIX(A, B)		A ## _ ## B
 
@@ -76,6 +76,8 @@ REDEF2_LOW() {
 	echo
 }
 
+echo "#undef first_ctx"
+echo "#define first_ctx	PREFIX(first_ctx)"
 echo "#undef core_ctx"
 echo "#define core_ctx	PREFIX(core_ctx)"
 echo
@@ -129,6 +131,13 @@ echo "#define ep_st	PREFIX(ep_st)"
 echo "#define ep_t	PREFIX(ep_t)"
 echo
 REDEF ep
+
+echo "#undef ed_st"
+echo "#undef ed_t"
+echo "#define ed_st	PREFIX(ed_st)"
+echo "#define ed_t	PREFIX(ed_t)"
+echo
+REDEF ed
 
 echo "#undef eb_st"
 echo "#undef eb_t"

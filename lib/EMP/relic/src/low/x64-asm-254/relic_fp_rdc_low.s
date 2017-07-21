@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -33,7 +33,7 @@
 #include "macro.s"
 
 .text
-.global fp_rdcn_low
+.global cdecl(fp_rdcn_low)
 
 /*
  * Function: fp_rdcn_low
@@ -41,7 +41,7 @@
  * Output: rax
  */
 
-fp_rdcn_low:
+cdecl(fp_rdcn_low):
 	push %r12
 	push %r13
 	push %r14

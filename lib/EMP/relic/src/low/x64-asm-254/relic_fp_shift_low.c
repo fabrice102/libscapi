@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -36,10 +36,6 @@
 /*============================================================================*/
 /* Public definitions                                                         */
 /*============================================================================*/
-
-dig_t fp_lsh1_low(dig_t *c, const dig_t *a) {
-	return mpn_lshift(c, a, FP_DIGS, 1);
-}
 
 dig_t fp_lshb_low(dig_t *c, const dig_t *a, int bits) {
 	return mpn_lshift(c, a, FP_DIGS, bits);

@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -25,7 +25,6 @@
  *
  * Implementation of exponentiation in extensions defined over prime fields.
  *
- * @version $Id$
  * @ingroup fpx
  */
 
@@ -37,6 +36,11 @@
 
 void fp2_exp(fp2_t c, fp2_t a, bn_t b) {
 	fp2_t t;
+
+	if (bn_is_zero(b)) {
+		fp2_set_dig(c, 1);
+		return;
+	}
 
 	fp2_null(t);
 
@@ -51,7 +55,12 @@ void fp2_exp(fp2_t c, fp2_t a, bn_t b) {
 				fp2_mul(t, t, a);
 			}
 		}
-		fp2_copy(c, t);
+
+		if (bn_sign(b) == BN_NEG) {
+			fp2_inv(c, t);
+		} else {
+			fp2_copy(c, t);
+		}
 	}
 	CATCH_ANY {
 		THROW(ERR_CAUGHT);
@@ -88,7 +97,12 @@ void fp2_conv_uni(fp2_t c, fp2_t a) {
 void fp2_exp_uni(fp2_t c, fp2_t a, bn_t b) {
 	fp2_t r, s, t[1 << (FP_WIDTH - 2)];
 	int i, l;
-	signed char naf[FP_BITS + 1], *k, n;
+	signed char naf[FP_BITS + 1], *k;
+
+	if (bn_is_zero(b)) {
+		fp2_set_dig(c, 1);
+		return;
+	}
 
 	fp2_null(r);
 	fp2_null(s);
@@ -111,8 +125,7 @@ void fp2_exp_uni(fp2_t c, fp2_t a, bn_t b) {
 		fp2_copy(t[0], a);
 
 		l = FP_BITS + 1;
-		fp2_zero(r);
-		fp_set_dig(r[0], 1);
+		fp2_set_dig(r, 1);
 		bn_rec_naf(naf, &l, b, FP_WIDTH);
 
 		k = naf + l - 1;
@@ -120,17 +133,20 @@ void fp2_exp_uni(fp2_t c, fp2_t a, bn_t b) {
 		for (i = l - 1; i >= 0; i--, k--) {
 			fp2_sqr(r, r);
 
-			n = *k;
-			if (n > 0) {
-				fp2_mul(r, r, t[n / 2]);
+			if (*k > 0) {
+				fp2_mul(r, r, t[*k / 2]);
 			}
-			if (n < 0) {
-				fp2_inv_uni(s, t[-n / 2]);
+			if (*k < 0) {
+				fp2_inv_uni(s, t[-*k / 2]);
 				fp2_mul(r, r, s);
 			}
 		}
 
-		fp2_copy(c, r);
+		if (bn_sign(b) == BN_NEG) {
+			fp2_inv_uni(c, r);
+		} else {
+			fp2_copy(c, r);
+		}
 	}
 	CATCH_ANY {
 		THROW(ERR_CAUGHT);
@@ -156,6 +172,8 @@ int fp2_test_uni(fp2_t a) {
 		fp_sqr(t[0], a[0]);
 		fp_sqr(t[1], a[1]);
 		fp_add(t[0], t[0], t[1]);
+		fp_set_dig(t[1], 2);
+		fp_neg(t[1], t[1]);
 
 		result = ((fp_cmp_dig(t[0], 1) == CMP_EQ) ? 1 : 0);
 	}
@@ -172,6 +190,11 @@ int fp2_test_uni(fp2_t a) {
 void fp3_exp(fp3_t c, fp3_t a, bn_t b) {
 	fp3_t t;
 
+	if (bn_is_zero(b)) {
+		fp3_set_dig(c, 1);
+		return;
+	}
+
 	fp3_null(t);
 
 	TRY {
@@ -185,7 +208,12 @@ void fp3_exp(fp3_t c, fp3_t a, bn_t b) {
 				fp3_mul(t, t, a);
 			}
 		}
-		fp3_copy(c, t);
+
+		if (bn_sign(b) == BN_NEG) {
+			fp3_inv(c, t);
+		} else {
+			fp3_copy(c, t);
+		}
 	}
 	CATCH_ANY {
 		THROW(ERR_CAUGHT);
@@ -197,6 +225,11 @@ void fp3_exp(fp3_t c, fp3_t a, bn_t b) {
 
 void fp6_exp(fp6_t c, fp6_t a, bn_t b) {
 	fp6_t t;
+
+	if (bn_is_zero(b)) {
+		fp6_set_dig(c, 1);
+		return;
+	}
 
 	fp6_null(t);
 
@@ -211,7 +244,12 @@ void fp6_exp(fp6_t c, fp6_t a, bn_t b) {
 				fp6_mul(t, t, a);
 			}
 		}
-		fp6_copy(c, t);
+
+		if (bn_sign(b) == BN_NEG) {
+			fp6_inv(c, t);
+		} else {
+			fp6_copy(c, t);
+		}
 	}
 	CATCH_ANY {
 		THROW(ERR_CAUGHT);
@@ -223,6 +261,11 @@ void fp6_exp(fp6_t c, fp6_t a, bn_t b) {
 
 void fp12_exp(fp12_t c, fp12_t a, bn_t b) {
 	fp12_t t;
+
+	if (bn_is_zero(b)) {
+		fp12_set_dig(c, 1);
+		return;
+	}
 
 	fp12_null(t);
 
@@ -240,7 +283,12 @@ void fp12_exp(fp12_t c, fp12_t a, bn_t b) {
 					fp12_mul(t, t, a);
 				}
 			}
-			fp12_copy(c, t);
+
+			if (bn_sign(b) == BN_NEG) {
+				fp12_inv(c, t);
+			} else {
+				fp12_copy(c, t);
+			}
 		}
 	}
 	CATCH_ANY {
@@ -252,33 +300,198 @@ void fp12_exp(fp12_t c, fp12_t a, bn_t b) {
 }
 
 void fp12_exp_cyc(fp12_t c, fp12_t a, bn_t b) {
-	fp12_t t;
-	int i, j, k, w = bn_ham(b);
+	int i, j, k, l, w = bn_ham(b), endom = 0;
+	bn_t n, _b[4], u[4], v[4];
 
-	fp12_null(t);
+	if (bn_is_zero(b)) {
+		fp12_set_dig(c, 1);
+		return;
+	}
 
-	if (w > (bn_bits(b) >> 3)) {
+	bn_null(n);
+
+	if ((bn_bits(b) > BN_DIGIT) && ((w << 3) > bn_bits(b))) {
+		fp12_t t[4];
+
 		TRY {
-			fp12_new(t);
+			bn_new(n);
+			for (i = 0; i < 4; i++) {
+				bn_null(u[i]);
+				bn_null(v[i]);
+				bn_null(_b[i]);
+				fp12_null(t[i]);
+				bn_new(u[i]);
+				bn_new(v[i]);
+				bn_new(_b[i]);
+				fp12_new(t[i]);
+			}
 
-			fp12_copy(t, a);
+			ep2_curve_get_ord(n);
 
-			for (i = bn_bits(b) - 2; i >= 0; i--) {
-				fp12_sqr_cyc(t, t);
-				if (bn_get_bit(b, i)) {
-					fp12_mul(t, t, a);
+			switch (ep_param_get()) {
+				case BN_P158:
+				case BN_P254:
+				case BN_P256:
+				case BN_P382:
+				case BN_P638:
+					ep2_curve_get_vs(v);
+
+					for (i = 0; i < 4; i++) {
+						bn_mul(v[i], v[i], b);
+						bn_div(v[i], v[i], n);
+						if (bn_sign(v[i]) == BN_NEG) {
+							bn_add_dig(v[i], v[i], 1);
+						}
+						bn_zero(_b[i]);
+					}
+
+					fp_param_get_var(u[0]);
+					bn_dbl(u[2], u[0]);
+					bn_add_dig(u[1], u[2], 1);
+					bn_sub_dig(u[3], u[0], 1);
+					bn_add_dig(u[0], u[0], 1);
+					bn_copy(_b[0], b);
+					for (i = 0; i < 4; i++) {
+						bn_mul(u[i], u[i], v[i]);
+						bn_mod(u[i], u[i], n);
+						bn_add(_b[0], _b[0], n);
+						bn_sub(_b[0], _b[0], u[i]);
+						bn_mod(_b[0], _b[0], n);
+					}
+
+					fp_param_get_var(u[0]);
+					bn_neg(u[1], u[0]);
+					bn_dbl(u[2], u[0]);
+					bn_add_dig(u[2], u[2], 1);
+					bn_dbl(u[3], u[2]);
+					for (i = 0; i < 4; i++) {
+						bn_mul(u[i], u[i], v[i]);
+						bn_mod(u[i], u[i], n);
+						bn_add(_b[1], _b[1], n);
+						bn_sub(_b[1], _b[1], u[i]);
+						bn_mod(_b[1], _b[1], n);
+					}
+
+					fp_param_get_var(u[0]);
+					bn_add_dig(u[1], u[0], 1);
+					bn_neg(u[1], u[1]);
+					bn_dbl(u[2], u[0]);
+					bn_add_dig(u[2], u[2], 1);
+					bn_sub_dig(u[3], u[2], 2);
+					bn_neg(u[3], u[3]);
+					for (i = 0; i < 4; i++) {
+						bn_mul(u[i], u[i], v[i]);
+						bn_mod(u[i], u[i], n);
+						bn_add(_b[2], _b[2], n);
+						bn_sub(_b[2], _b[2], u[i]);
+						bn_mod(_b[2], _b[2], n);
+					}
+
+					fp_param_get_var(u[1]);
+					bn_dbl(u[0], u[1]);
+					bn_neg(u[0], u[0]);
+					bn_dbl(u[2], u[1]);
+					bn_add_dig(u[2], u[2], 1);
+					bn_sub_dig(u[3], u[1], 1);
+					bn_neg(u[1], u[1]);
+					for (i = 0; i < 4; i++) {
+						bn_mul(u[i], u[i], v[i]);
+						bn_mod(u[i], u[i], n);
+						bn_add(_b[3], _b[3], n);
+						bn_sub(_b[3], _b[3], u[i]);
+						bn_mod(_b[3], _b[3], n);
+					}
+
+					for (i = 0; i < 4; i++) {
+						l = bn_bits(_b[i]);
+						bn_sub(_b[i], n, _b[i]);
+						if (bn_bits(_b[i]) > l) {
+							bn_sub(_b[i], _b[i], n);
+							_b[i]->sign = BN_POS;
+						} else {
+							_b[i]->sign = BN_NEG;
+						}
+					}
+
+					endom = 1;
+					break;
+				case B12_P381:
+				case B12_P455:
+				case B12_P638:
+					bn_abs(v[0], b);
+					fp_param_get_var(u[0]);
+
+					bn_copy(u[1], u[0]);
+					if (bn_sign(u[0]) == BN_NEG) {
+						bn_neg(u[0], u[0]);
+					}
+
+					for (i = 0; i < 4; i++) {
+						bn_mod(_b[i], v[0], u[0]);
+						bn_div(v[0], v[0], u[0]);
+						if ((bn_sign(u[1]) == BN_NEG) && (i % 2 != 0)) {
+							bn_neg(_b[i], _b[i]);
+						}
+						if (bn_sign(b) == BN_NEG) {
+							bn_neg(_b[i], _b[i]);
+						}
+					}
+
+					endom = 1;
+					break;
+			}
+
+			if (endom) {
+				for (i = 0; i < 4; i++) {
+					fp12_frb(t[i], a, i);
+					if (bn_sign(_b[i]) == BN_NEG) {
+						fp12_inv_uni(t[i], t[i]);
+					}
+				}
+
+				l = MAX(bn_bits(_b[0]), bn_bits(_b[1]));
+				l = MAX(l, MAX(bn_bits(_b[2]), bn_bits(_b[3])));
+				fp12_set_dig(c, 1);
+				for (i = l - 1; i >= 0; i--) {
+					fp12_sqr_cyc(c, c);
+					for (j = 0; j < 4; j++) {
+						if (bn_get_bit(_b[j], i)) {
+							fp12_mul(c, c, t[j]);
+						}
+					}
+				}
+			} else {
+				fp12_copy(t[0], a);
+
+				for (i = bn_bits(b) - 2; i >= 0; i--) {
+					fp12_sqr_cyc(t[0], t[0]);
+					if (bn_get_bit(b, i)) {
+						fp12_mul(t[0], t[0], a);
+					}
+				}
+
+				fp12_copy(c, t[0]);
+				if (bn_sign(b) == BN_NEG) {
+					fp12_inv_uni(c, c);
 				}
 			}
-			fp12_copy(c, t);
 		}
 		CATCH_ANY {
 			THROW(ERR_CAUGHT);
 		}
 		FINALLY {
-			fp12_free(t);
+			bn_free(n);
+			for (i = 0; i < 4; i++) {
+				bn_free(u[i]);
+				bn_free(v[i]);
+				bn_free(_b[i]);
+				fp12_free(t[i]);
+			}
 		}
 	} else {
-		fp12_t u[w];
+		fp12_t t, u[w];
+
+		fp12_null(t);
 
 		TRY {
 			for (i = 0; i < w; i++) {
@@ -331,6 +544,11 @@ void fp12_exp_cyc(fp12_t c, fp12_t a, bn_t b) {
 void fp12_exp_cyc_sps(fp12_t c, fp12_t a, int *b, int len) {
 	int i, j, k, w = len;
 	fp12_t t, u[w];
+
+	if (len == 0) {
+		fp12_set_dig(c, 1);
+		return;
+	}
 
 	fp12_null(t);
 
@@ -434,7 +652,9 @@ void fp12_conv_cyc(fp12_t c, fp12_t a) {
 
 		/* Second, compute c^(p^2 + 1). */
 		/* t = c^(p^2). */
-		fp12_frb(t, c, 2);
+		fp12_frb(t, c, 1);
+		fp12_frb(t, t, 1);
+
 		/* c = c^(p^2 + 1). */
 		fp12_mul(c, c, t);
 	}
@@ -529,6 +749,10 @@ void fp12_back_cyc(fp12_t c, fp12_t a) {
 void fp12_back_cyc_sim(fp12_t c[], fp12_t a[], int n) {
 	fp2_t t0[n], t1[n], t2[n];
 
+	if (n == 0) {
+		return;
+	}
+
 	for (int i = 0; i < n; i++) {
 		fp2_null(t0[i]);
 		fp2_null(t1[i]);
@@ -598,6 +822,11 @@ void fp12_back_cyc_sim(fp12_t c[], fp12_t a[], int n) {
 void fp18_exp(fp18_t c, fp18_t a, bn_t b) {
 	fp18_t t;
 
+	if (bn_is_zero(b)) {
+		fp18_set_dig(c, 1);
+		return;
+	}
+
 	fp18_null(t);
 
 	TRY {
@@ -614,7 +843,12 @@ void fp18_exp(fp18_t c, fp18_t a, bn_t b) {
 					fp18_mul(t, t, a);
 				}
 			}
-			fp18_copy(c, t);
+
+			if (bn_sign(b) == BN_NEG) {
+				fp18_inv(c, t);
+			} else {
+				fp18_copy(c, t);
+			}
 		}
 	}
 	CATCH_ANY {
@@ -628,6 +862,11 @@ void fp18_exp(fp18_t c, fp18_t a, bn_t b) {
 void fp18_exp_cyc(fp18_t c, fp18_t a, bn_t b) {
 	fp18_t t;
 	int i, j, k, w = bn_ham(b);
+
+	if (bn_is_zero(b)) {
+		fp18_set_dig(c, 1);
+		return;
+	}
 
 	fp18_null(t);
 
@@ -643,7 +882,12 @@ void fp18_exp_cyc(fp18_t c, fp18_t a, bn_t b) {
 					fp18_mul(t, t, a);
 				}
 			}
-			fp18_copy(c, t);
+
+			if (bn_sign(b) == BN_NEG) {
+				fp18_inv_uni(c, t);
+			} else {
+				fp18_copy(c, t);
+			}
 		}
 		CATCH_ANY {
 			THROW(ERR_CAUGHT);
@@ -705,6 +949,10 @@ void fp18_exp_cyc(fp18_t c, fp18_t a, bn_t b) {
 void fp18_exp_cyc_sps(fp18_t c, fp18_t a, int *b, int len) {
 	int i, j, k, w = len;
 	fp18_t t, u[w];
+
+	if (len == 0) {
+		fp12_set_dig(c, 1);
+	}
 
 	fp18_null(t);
 
@@ -934,6 +1182,10 @@ void fp18_back_cyc(fp18_t c, fp18_t a) {
 
 void fp18_back_cyc_sim(fp18_t c[], fp18_t a[], int n) {
 	fp3_t t0[n], t1[n], t2[n], t3[n], t4[n], t5[n], t6[n];
+
+	if (n == 0) {
+		return;
+	}
 
 	for (int i = 0; i < n; i++) {
 		fp3_null(t0[i]);

@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -23,7 +23,7 @@
 /**
  * @file
  *
- * Implementation of the low-le&vel in&version functions.
+ * Implementation of the low-level inversion functions.
  *
  * @&version $Id$
  * @ingroup fp
@@ -69,12 +69,12 @@
 #define R2 $0xA2C62EFFFFFFFFCD
 #define R3 $0x212BA4F27FFFFFF5
 
-.global fp_invn_asm
+.global cdecl(fp_invn_asm)
 
 /**
  * rdi = a, rsi = x1, rdx = c
  */
-fp_invn_asm:
+cdecl(fp_invn_asm):
 	push	%r12
 	push	%r13
 	push	%r14

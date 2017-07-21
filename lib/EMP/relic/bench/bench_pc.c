@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -479,7 +479,7 @@ static void arith2(void) {
 		bn_rand(k, BN_POS, bn_bits(n));
 		bn_rand_mod(k, n);
 		g2_mul_pre(t, p);
-		BENCH_ADD(g2_mul_fix(q, (const g2_t *)t, k));
+		BENCH_ADD(g2_mul_fix(q, t, k));
 	}
 	BENCH_END;
 
@@ -625,12 +625,13 @@ static void util(void) {
 
 static void arith(void) {
 	gt_t a, b, c;
-	bn_t d;
+	bn_t d, e;
 
 	gt_new(a);
 	gt_new(b);
 	gt_new(c);
 	bn_new(d);
+	bn_new(e);
 
 	BENCH_BEGIN("gt_mul") {
 		gt_rand(a);
@@ -654,8 +655,9 @@ static void arith(void) {
 
 	BENCH_BEGIN("gt_exp") {
 		gt_rand(a);
-		g1_get_ord(d);
-		BENCH_ADD(gt_exp(c, a, d));
+		gt_get_ord(d);
+		bn_rand_mod(e, d);
+		BENCH_ADD(gt_exp(c, a, e));
 	}
 	BENCH_END;
 
@@ -663,6 +665,7 @@ static void arith(void) {
 	gt_free(b);
 	gt_free(c);
 	bn_free(d);
+	bn_free(e);
 }
 
 static void pairing(void) {

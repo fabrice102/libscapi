@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -610,14 +610,14 @@ static int ecies(void) {
 		char str[2 * FC_BYTES + 1];
 
 		switch (ec_param_get()) {
-			
+
 #if defined(EP_PLAIN) && FP_PRIME == 256
 			case NIST_P256:
 				ASSIGNP(NIST_P256);
 				memcpy(msg, result, sizeof(result));
 				break;
 #endif
-			default:			
+			default:
 				(void)str;
 				code = STS_OK;
 				break;
@@ -1160,11 +1160,12 @@ int main(void) {
 			core_clean();
 			return 1;
 		}
-
+#if defined(WITH_BC)
 		if (ecies() != STS_OK) {
 			core_clean();
 			return 1;
 		}
+#endif
 
 		if (ecdsa() != STS_OK) {
 			core_clean();

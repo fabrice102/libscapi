@@ -1,8 +1,5 @@
-#include "relic_fp_low.h"
-
-.arch armv7-a
-
-/********************************************************** Operand-Caching Multiplication ESCALONADO ***********************************************************************/
+.syntax unified
+.global fp_muln_low
 
 /*============================================================================*/
 /* Uso dos registradores                                                      */
@@ -23,10 +20,6 @@
 /* r14 = lr                                                                        */
 /* r15 = pc                                                                        */
 /*============================================================================*/
-
-.text
-
-.global fp_muln_low
 
 fp_muln_low:
     STMDB sp!, {r4-r12, r14}
@@ -612,3 +605,4 @@ ADC r3, r3, #0
 
     LDMIA sp!, {r4-r12, r14}
     MOV pc, lr
+

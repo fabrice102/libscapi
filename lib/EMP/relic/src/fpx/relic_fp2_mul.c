@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -25,7 +25,6 @@
  *
  * Implementation of multiplication in a quadratic extension of a prime field.
  *
- * @version $Id$
  * @ingroup fpx
  */
 
@@ -172,7 +171,7 @@ void fp2_mul_nor_basic(fp2_t c, fp2_t a) {
 				fp2_mul_art(c, a);
 				break;
 			case 7:
-				/* If p = 7 mod 8, we choose (4 + u) is a QNR/CNR. */
+				/* If p = 7 mod 8, we choose (4 + u) as a QNR/CNR. */
 				fp2_mul_art(t, a);
 				fp2_dbl(c, a);
 				fp2_dbl(c, c);
@@ -228,7 +227,7 @@ void fp2_mul_art(fp2_t c, fp2_t a) {
 		}
 		for (int i = 1; i <= fp_prime_get_qnr() + 1; i++) {
 			fp_add(c[0], c[0], a[1]);
-		}		
+		}
 		fp_copy(c[1], t);
 #endif
 	}

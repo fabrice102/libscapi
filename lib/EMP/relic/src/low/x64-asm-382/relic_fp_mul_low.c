@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -23,33 +23,24 @@
 /**
  * @file
  *
- * Implementation of the low-level multiple precision addition and subtraction
- * functions.
+ * Implementation of the low-level prime field multiplication functions.
  *
  * @ingroup bn
  */
 
 #include <gmp.h>
 
-#include "relic_bn.h"
-#include "relic_bn_low.h"
+#include "relic_fp.h"
+#include "relic_fp_low.h"
 
 /*============================================================================*/
 /* Public definitions                                                         */
 /*============================================================================*/
 
-dig_t bn_add1_low(dig_t *c, const dig_t *a, dig_t digit, int size) {
-	return mpn_add_1(c, a, size, digit);
+dig_t fp_mula_low(dig_t *c, const dig_t *a, dig_t digit) {
+	return mpn_addmul_1(c, a, FP_DIGS, digit);
 }
 
-dig_t bn_addn_low(dig_t *c, const dig_t *a, const dig_t *b, int size) {
-	return mpn_add_n(c, a, b, size);
-}
-
-dig_t bn_sub1_low(dig_t *c, const dig_t *a, dig_t digit, int size) {
-	return mpn_sub_1(c, a, size, digit);
-}
-
-dig_t bn_subn_low(dig_t *c, const dig_t *a, const dig_t *b, int size) {
-	return mpn_sub_n(c, a, b, size);
+dig_t fp_mul1_low(dig_t *c, const dig_t *a, dig_t digit) {
+	return mpn_mul_1(c, a, FP_DIGS, digit);
 }

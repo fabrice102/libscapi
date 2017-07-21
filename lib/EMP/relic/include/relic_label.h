@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -33,7 +33,7 @@
 
 #include "relic_conf.h"
 
-#define PREFIX(F)			_PREFIX(LABEL, F)
+#define PREFIX(F)		_PREFIX(LABEL, F)
 #define _PREFIX(A, B)		__PREFIX(A, B)
 #define __PREFIX(A, B)		A ## _ ## B
 
@@ -45,7 +45,6 @@
 
 #undef first_ctx
 #define first_ctx	PREFIX(first_ctx)
-
 #undef core_ctx
 #define core_ctx	PREFIX(core_ctx)
 
@@ -710,7 +709,7 @@
 #undef fb_mul_karat
 #undef fb_sqr_basic
 #undef fb_sqr_integ
-#undef fb_sqr_table
+#undef fb_sqr_lutbl
 #undef fb_lsh
 #undef fb_rsh
 #undef fb_rdc_basic
@@ -785,7 +784,7 @@
 #define fb_mul_karat 	PREFIX(fb_mul_karat)
 #define fb_sqr_basic 	PREFIX(fb_sqr_basic)
 #define fb_sqr_integ 	PREFIX(fb_sqr_integ)
-#define fb_sqr_table 	PREFIX(fb_sqr_table)
+#define fb_sqr_lutbl 	PREFIX(fb_sqr_lutbl)
 #define fb_lsh 	PREFIX(fb_lsh)
 #define fb_rsh 	PREFIX(fb_rsh)
 #define fb_rdc_basic 	PREFIX(fb_rdc_basic)
@@ -1031,6 +1030,133 @@
 #define ep_pck 	PREFIX(ep_pck)
 #define ep_upk 	PREFIX(ep_upk)
 
+#undef ed_st
+#undef ed_t
+#define ed_st	PREFIX(ed_st)
+#define ed_t	PREFIX(ed_t)
+
+#undef ed_param_set
+#undef ed_param_set_any
+#undef ed_param_get
+#undef ed_curve_get_ord
+#undef ed_curve_get_gen
+#undef ed_curve_get_tab
+#undef ed_curve_get_cof
+#undef ed_param_print
+#undef ed_param_level
+#undef ed_projc_to_extnd
+#undef ed_rand
+#undef ed_copy
+#undef ed_cmp
+#undef ed_set_infty
+#undef ed_is_infty
+#undef ed_neg
+#undef ed_add
+#undef ed_sub
+#undef ed_dbl
+#undef ed_dbl_short
+#undef ed_norm
+#undef ed_norm_sim
+#undef ed_map
+#undef ed_curve_init
+#undef ed_curve_clean
+#undef ed_mul_pre_basic
+#undef ed_mul_pre_yaowi
+#undef ed_mul_pre_nafwi
+#undef ed_mul_pre_combs
+#undef ed_mul_pre_combd
+#undef ed_mul_pre_lwnaf
+#undef ed_mul_fix_basic
+#undef ed_mul_fix_yaowi
+#undef ed_mul_fix_nafwi
+#undef ed_mul_fix_combs
+#undef ed_mul_fix_combd
+#undef ed_mul_fix_lwnaf
+#undef ed_mul_fix_lwnaf_mixed
+#undef ed_mul_gen
+#undef ed_mul_dig
+#undef ed_mul_sim_basic
+#undef ed_mul_sim_trick
+#undef ed_mul_sim_inter
+#undef ed_mul_sim_joint
+#undef ed_mul_sim_gen
+#undef ed_tab
+#undef ed_print
+#undef ed_is_valid
+#undef ed_size_bin
+#undef ed_read_bin
+#undef ed_write_bin
+#undef ed_mul_basic
+#undef ed_mul_slide
+#undef ed_mul_monty
+#undef ed_mul_fixed
+#undef ed_mul_lwnaf
+#undef ed_mul_lwnaf_mixed
+#undef ed_mul_lwreg
+#undef ed_pck
+#undef ed_upk
+
+#define ed_param_set 	PREFIX(ed_param_set)
+#define ed_param_set_any 	PREFIX(ed_param_set_any)
+#define ed_param_get 	PREFIX(ed_param_get)
+#define ed_curve_get_ord 	PREFIX(ed_curve_get_ord)
+#define ed_curve_get_gen 	PREFIX(ed_curve_get_gen)
+#define ed_curve_get_tab 	PREFIX(ed_curve_get_tab)
+#define ed_curve_get_cof 	PREFIX(ed_curve_get_cof)
+#define ed_param_print 	PREFIX(ed_param_print)
+#define ed_param_level 	PREFIX(ed_param_level)
+#define ed_projc_to_extnd 	PREFIX(ed_projc_to_extnd)
+#define ed_rand 	PREFIX(ed_rand)
+#define ed_copy 	PREFIX(ed_copy)
+#define ed_cmp 	PREFIX(ed_cmp)
+#define ed_set_infty 	PREFIX(ed_set_infty)
+#define ed_is_infty 	PREFIX(ed_is_infty)
+#define ed_neg 	PREFIX(ed_neg)
+#define ed_add 	PREFIX(ed_add)
+#define ed_sub 	PREFIX(ed_sub)
+#define ed_dbl 	PREFIX(ed_dbl)
+#define ed_dbl_short 	PREFIX(ed_dbl_short)
+#define ed_norm 	PREFIX(ed_norm)
+#define ed_norm_sim 	PREFIX(ed_norm_sim)
+#define ed_map 	PREFIX(ed_map)
+#define ed_curve_init 	PREFIX(ed_curve_init)
+#define ed_curve_clean 	PREFIX(ed_curve_clean)
+#define ed_mul_pre_basic 	PREFIX(ed_mul_pre_basic)
+#define ed_mul_pre_yaowi 	PREFIX(ed_mul_pre_yaowi)
+#define ed_mul_pre_nafwi 	PREFIX(ed_mul_pre_nafwi)
+#define ed_mul_pre_combs 	PREFIX(ed_mul_pre_combs)
+#define ed_mul_pre_combd 	PREFIX(ed_mul_pre_combd)
+#define ed_mul_pre_lwnaf 	PREFIX(ed_mul_pre_lwnaf)
+#define ed_mul_fix_basic 	PREFIX(ed_mul_fix_basic)
+#define ed_mul_fix_yaowi 	PREFIX(ed_mul_fix_yaowi)
+#define ed_mul_fix_nafwi 	PREFIX(ed_mul_fix_nafwi)
+#define ed_mul_fix_combs 	PREFIX(ed_mul_fix_combs)
+#define ed_mul_fix_combd 	PREFIX(ed_mul_fix_combd)
+#define ed_mul_fix_lwnaf 	PREFIX(ed_mul_fix_lwnaf)
+#define ed_mul_fix_lwnaf_mixed 	PREFIX(ed_mul_fix_lwnaf_mixed)
+#define ed_mul_gen 	PREFIX(ed_mul_gen)
+#define ed_mul_dig 	PREFIX(ed_mul_dig)
+#define ed_mul_sim_basic 	PREFIX(ed_mul_sim_basic)
+#define ed_mul_sim_trick 	PREFIX(ed_mul_sim_trick)
+#define ed_mul_sim_inter 	PREFIX(ed_mul_sim_inter)
+#define ed_mul_sim_joint 	PREFIX(ed_mul_sim_joint)
+#define ed_mul_sim_gen 	PREFIX(ed_mul_sim_gen)
+#define ed_tab 	PREFIX(ed_tab)
+#define ed_print 	PREFIX(ed_print)
+#define ed_is_valid 	PREFIX(ed_is_valid)
+#define ed_size_bin 	PREFIX(ed_size_bin)
+#define ed_read_bin 	PREFIX(ed_read_bin)
+#define ed_write_bin 	PREFIX(ed_write_bin)
+#define ed_mul_basic 	PREFIX(ed_mul_basic)
+#define ed_mul_slide 	PREFIX(ed_mul_slide)
+#define ed_mul_monty 	PREFIX(ed_mul_monty)
+#define ed_mul_fixed 	PREFIX(ed_mul_fixed)
+#define ed_mul_lwnaf 	PREFIX(ed_mul_lwnaf)
+#define ed_mul_lwnaf_mixed 	PREFIX(ed_mul_lwnaf_mixed)
+#define ed_mul_lwreg 	PREFIX(ed_mul_lwreg)
+#define ed_pck 	PREFIX(ed_pck)
+#define ed_upk 	PREFIX(ed_upk)
+
 #undef eb_st
 #undef eb_t
 #define eb_st	PREFIX(eb_st)
@@ -1189,6 +1315,7 @@
 #undef ep2_curve_clean
 #undef ep2_curve_get_a
 #undef ep2_curve_get_b
+#undef ep2_curve_get_vs
 #undef ep2_curve_opt_a
 #undef ep2_curve_is_twist
 #undef ep2_curve_get_gen
@@ -1219,7 +1346,11 @@
 #undef ep2_dbl_basic
 #undef ep2_dbl_slp_basic
 #undef ep2_dbl_projc
-#undef ep2_mul
+#undef ep2_mul_basic
+#undef ep2_mul_slide
+#undef ep2_mul_monty
+#undef ep2_mul_lwnaf
+#undef ep2_mul_lwreg
 #undef ep2_mul_gen
 #undef ep2_mul_pre_basic
 #undef ep2_mul_pre_yaowi
@@ -1240,6 +1371,7 @@
 #undef ep2_mul_sim_gen
 #undef ep2_mul_dig
 #undef ep2_norm
+#undef ep2_norm_sim
 #undef ep2_map
 #undef ep2_frb
 #undef ep2_pck
@@ -1249,6 +1381,7 @@
 #define ep2_curve_clean 	PREFIX(ep2_curve_clean)
 #define ep2_curve_get_a 	PREFIX(ep2_curve_get_a)
 #define ep2_curve_get_b 	PREFIX(ep2_curve_get_b)
+#define ep2_curve_get_vs 	PREFIX(ep2_curve_get_vs)
 #define ep2_curve_opt_a 	PREFIX(ep2_curve_opt_a)
 #define ep2_curve_is_twist 	PREFIX(ep2_curve_is_twist)
 #define ep2_curve_get_gen 	PREFIX(ep2_curve_get_gen)
@@ -1279,7 +1412,11 @@
 #define ep2_dbl_basic 	PREFIX(ep2_dbl_basic)
 #define ep2_dbl_slp_basic 	PREFIX(ep2_dbl_slp_basic)
 #define ep2_dbl_projc 	PREFIX(ep2_dbl_projc)
-#define ep2_mul 	PREFIX(ep2_mul)
+#define ep2_mul_basic 	PREFIX(ep2_mul_basic)
+#define ep2_mul_slide 	PREFIX(ep2_mul_slide)
+#define ep2_mul_monty 	PREFIX(ep2_mul_monty)
+#define ep2_mul_lwnaf 	PREFIX(ep2_mul_lwnaf)
+#define ep2_mul_lwreg 	PREFIX(ep2_mul_lwreg)
 #define ep2_mul_gen 	PREFIX(ep2_mul_gen)
 #define ep2_mul_pre_basic 	PREFIX(ep2_mul_pre_basic)
 #define ep2_mul_pre_yaowi 	PREFIX(ep2_mul_pre_yaowi)
@@ -1300,6 +1437,7 @@
 #define ep2_mul_sim_gen 	PREFIX(ep2_mul_sim_gen)
 #define ep2_mul_dig 	PREFIX(ep2_mul_dig)
 #define ep2_norm 	PREFIX(ep2_norm)
+#define ep2_norm_sim 	PREFIX(ep2_norm_sim)
 #define ep2_map 	PREFIX(ep2_map)
 #define ep2_frb 	PREFIX(ep2_frb)
 #define ep2_pck 	PREFIX(ep2_pck)
@@ -1752,10 +1890,15 @@
 #undef pp_norm_k2
 #undef pp_norm_k12
 #undef pp_map_tatep_k2
+#undef pp_map_sim_tatep_k2
 #undef pp_map_weilp_k2
+#undef pp_map_sim_weilp_k2
 #undef pp_map_tatep_k12
+#undef pp_map_sim_tatep_k12
 #undef pp_map_weilp_k12
+#undef pp_map_sim_weilp_k12
 #undef pp_map_oatep_k12
+#undef pp_map_sim_oatep_k12
 
 #define pp_map_init 	PREFIX(pp_map_init)
 #define pp_map_clean 	PREFIX(pp_map_clean)
@@ -1778,10 +1921,15 @@
 #define pp_norm_k2 	PREFIX(pp_norm_k2)
 #define pp_norm_k12 	PREFIX(pp_norm_k12)
 #define pp_map_tatep_k2 	PREFIX(pp_map_tatep_k2)
+#define pp_map_sim_tatep_k2 	PREFIX(pp_map_sim_tatep_k2)
 #define pp_map_weilp_k2 	PREFIX(pp_map_weilp_k2)
+#define pp_map_sim_weilp_k2 	PREFIX(pp_map_sim_weilp_k2)
 #define pp_map_tatep_k12 	PREFIX(pp_map_tatep_k12)
+#define pp_map_sim_tatep_k12 	PREFIX(pp_map_sim_tatep_k12)
 #define pp_map_weilp_k12 	PREFIX(pp_map_weilp_k12)
+#define pp_map_sim_weilp_k12 	PREFIX(pp_map_sim_weilp_k12)
 #define pp_map_oatep_k12 	PREFIX(pp_map_oatep_k12)
+#define pp_map_sim_oatep_k12 	PREFIX(pp_map_sim_oatep_k12)
 
 #undef rsa_t
 #undef rabin_t
@@ -1843,6 +1991,9 @@
 #undef cp_bbs_gen
 #undef cp_bbs_sig
 #undef cp_bbs_ver
+#undef cp_zss_gen
+#undef cp_zss_sig
+#undef cp_zss_ver
 #undef cp_vbnn_ibs_kgc_gen
 #undef cp_vbnn_ibs_kgc_extract_key
 #undef cp_vbnn_ibs_user_sign
@@ -1899,6 +2050,9 @@
 #define cp_bbs_gen 	PREFIX(cp_bbs_gen)
 #define cp_bbs_sig 	PREFIX(cp_bbs_sig)
 #define cp_bbs_ver 	PREFIX(cp_bbs_ver)
+#define cp_zss_gen 	PREFIX(cp_zss_gen)
+#define cp_zss_sig 	PREFIX(cp_zss_sig)
+#define cp_zss_ver 	PREFIX(cp_zss_ver)
 #define cp_vbnn_ibs_kgc_gen 	PREFIX(cp_vbnn_ibs_kgc_gen)
 #define cp_vbnn_ibs_kgc_extract_key 	PREFIX(cp_vbnn_ibs_kgc_extract_key)
 #define cp_vbnn_ibs_user_sign 	PREFIX(cp_vbnn_ibs_user_sign)

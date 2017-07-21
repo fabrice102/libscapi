@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -37,7 +37,7 @@
 /*============================================================================*/
 
 void fp2_sqrn_low(dv2_t c, fp2_t a) {
-	align dig_t t0[2 * FP_DIGS], t1[2 * FP_DIGS], t2[2 * FP_DIGS];
+	relic_align dig_t t0[2 * FP_DIGS], t1[2 * FP_DIGS], t2[2 * FP_DIGS];
 
 	/* t0 = (a0 + a1). */
 #ifdef FP_SPACE
@@ -90,7 +90,7 @@ void fp2_sqrn_low(dv2_t c, fp2_t a) {
 		}
 		for (int i = 0; i <= fp_prime_get_qnr(); i++) {
 			fp_subc_low(c[0], c[0], c[1]);
-		}		
+		}
 		/* c1 = 2 * a0 * a1. */
 		fp_addd_low(c[1], c[1], c[1]);
 #else
@@ -99,7 +99,7 @@ void fp2_sqrn_low(dv2_t c, fp2_t a) {
 		}
 		for (int i = 0; i <= fp_prime_get_qnr(); i++) {
 			fp_subc_low(c[0], c[0], c[1]);
-		}		
+		}
 		/* c1 = 2 * a0 * a1. */
 		fp_addc_low(c[1], c[1], c[1]);
 #endif
@@ -109,7 +109,7 @@ void fp2_sqrn_low(dv2_t c, fp2_t a) {
 }
 
 void fp2_sqrm_low(fp2_t c, fp2_t a) {
-	align dv2_t t;
+	relic_align dv2_t t;
 
 	dv2_null(t);
 
@@ -125,8 +125,8 @@ void fp2_sqrm_low(fp2_t c, fp2_t a) {
 }
 
 void fp3_sqrn_low(dv3_t c, fp3_t a) {
-	align dig_t t0[2 * FP_DIGS], t1[2 * FP_DIGS], t2[2 * FP_DIGS];
-	align dig_t t3[2 * FP_DIGS], t4[2 * FP_DIGS], t5[2 * FP_DIGS];
+	relic_align dig_t t0[2 * FP_DIGS], t1[2 * FP_DIGS], t2[2 * FP_DIGS];
+	relic_align dig_t t3[2 * FP_DIGS], t4[2 * FP_DIGS], t5[2 * FP_DIGS];
 
 	/* t0 = a_0^2. */
 	fp_sqrn_low(t0, a[0]);
@@ -181,7 +181,7 @@ void fp3_sqrn_low(dv3_t c, fp3_t a) {
 }
 
 void fp3_sqrm_low(fp3_t c, fp3_t a) {
-	align dv3_t t;
+	relic_align dv3_t t;
 
 	dv3_null(t);
 

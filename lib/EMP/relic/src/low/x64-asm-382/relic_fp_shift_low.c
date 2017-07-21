@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -23,37 +23,56 @@
 /**
  * @file
  *
- * Implementation of the multiple precision integer arithmetic multiplication
- * functions.
+ * Implementation of the low-level prime field shifting functions.
  *
  * @ingroup bn
  */
 
 #include <gmp.h>
 
-#include "relic_bn.h"
-#include "relic_bn_low.h"
-#include "relic_util.h"
+#include "relic_fp.h"
+#include "relic_fp_low.h"
 
 /*============================================================================*/
 /* Public definitions                                                         */
 /*============================================================================*/
 
-dig_t bn_mula_low(dig_t *c, const dig_t *a, dig_t digit, int size) {
-	return mpn_addmul_1(c, a, size, digit);
+dig_t fp_lshb_low(dig_t *c, const dig_t *a, int bits) {
+	return mpn_lshift(c, a, FP_DIGS, bits);
 }
 
-dig_t bn_mul1_low(dig_t *c, const dig_t *a, dig_t digit, int size) {
-	return mpn_mul_1(c, a, size, digit);
+void fp_lshd_low(dig_t *c, const dig_t *a, int digits) {
+	dig_t *top;
+	const dig_t *bot;
+	int i;
+
+	top = c + FP_DIGS - 1;
+	bot = a + FP_DIGS - 1 - digits;
+
+	for (i = 0; i < FP_DIGS - digits; i++, top--, bot--) {
+		*top = *bot;
+	}
+	for (i = 0; i < digits; i++, c++) {
+		*c = 0;
+	}
 }
 
-void bn_muln_low(dig_t *c, const dig_t *a, const dig_t *b, int size) {
-	mpn_mul_n(c, a, b, size);
+dig_t fp_rshb_low(dig_t *c, const dig_t *a, int bits) {
+	return mpn_rshift(c, a, FP_DIGS, bits);
 }
 
-void bn_muld_low(dig_t *c, const dig_t *a, int sizea, const dig_t *b, int sizeb,
-		int low, int high) {
-	(void)low;
-	(void)high;
-	mpn_mul(c, a, sizea, b, sizeb);
+void fp_rshd_low(dig_t *c, const dig_t *a, int digits) {
+	const dig_t *top;
+	dig_t *bot;
+	int i;
+
+	top = a + digits;
+	bot = c;
+
+	for (i = 0; i < FP_DIGS - digits; i++, top++, bot++) {
+		*bot = *top;
+	}
+	for (; i < FP_DIGS; i++, bot++) {
+		*bot = 0;
+	}
 }

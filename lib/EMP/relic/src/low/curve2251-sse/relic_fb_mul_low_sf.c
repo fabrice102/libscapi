@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -41,7 +41,7 @@
 
 #define INV(A,B,C,D)	D,C,B,A
 
-const align uint32_t tm[] = {
+const relic_align uint32_t tm[] = {
 	INV(0x00000000, 0x00000000, 0x00000000, 0x00000000),
 	INV(0x0F0E0D0C, 0x0B0A0908, 0x07060504, 0x03020100),
 	INV(0x1E1C1A18, 0x16141210, 0x0E0C0A08, 0x06040200),

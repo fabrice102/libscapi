@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -74,7 +74,7 @@
 /*============================================================================*/
 
 void fp_rdcs_low(dig_t *c, const dig_t *a, const dig_t *m) {
-	align dig_t q[2 * FP_DIGS], _q[2 * FP_DIGS], t[2 * FP_DIGS], r[FP_DIGS];
+	relic_align dig_t q[2 * FP_DIGS], _q[2 * FP_DIGS], t[2 * FP_DIGS], r[FP_DIGS];
 	const int *sform;
 	int len, first, i, j, k, b0, d0, b1, d1;
 

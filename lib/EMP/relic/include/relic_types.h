@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -129,9 +129,9 @@ typedef unsigned long long ull_t;
  * Specification for aligned variables.
  */
 #if ALIGN > 1
-#define align 			__attribute__ ((aligned (ALIGN)))
+#define relic_align 			__attribute__ ((aligned (ALIGN)))
 #else
-#define align 			/* empty*/
+#define relic_align 			/* empty*/
 #endif
 
 /**

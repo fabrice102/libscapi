@@ -3,6 +3,9 @@
 #include "malicious/xor_tree_naive.h"
 #include <iostream>
 using namespace std;
+
+#define SERVER_IP  "127.0.0.1"
+
 template<typename IO, template<typename> typename T>
 double test_ot(IO * io, int party, int length, T<IO>* ot = nullptr, int TIME = 10) {
 	if(ot == nullptr) 

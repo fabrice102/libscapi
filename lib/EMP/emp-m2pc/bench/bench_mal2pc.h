@@ -3,6 +3,8 @@
 #include <string>
 using namespace std;
 
+#define SERVER_IP  "127.0.0.1"
+
 template<RTCktOpt rt = off>
 double bench_mal2pc_all_online(void * f, uint64_t len1, uint64_t len2, uint64_t len3, NetIO * io, uint64_t TIME, uint64_t party) {
 	double t = 0;

@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -335,11 +335,6 @@ void ed_param_print(void);
  * Returns the current security level.
  */
 int ed_param_level(void);
-
-/**
- * Recovers the x coordinate of and Edwards curve point given y coordinate and d.
- */
-void ed_recover_x(fp_t x, const fp_t y, const fp_t d, const fp_t a);
 
 #if ED_ADD == EXTND
 /**

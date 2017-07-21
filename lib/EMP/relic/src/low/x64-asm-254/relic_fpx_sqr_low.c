@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -25,7 +25,7 @@
  *
  * Implementation of the low-level extension field squaring functions.
  *
- * @ingroup pp
+ * @ingroup fpx
  */
 
 #include "relic_core.h"
@@ -37,8 +37,8 @@
 /*============================================================================*/
 
 void fp3_sqrn_low(dv3_t c, fp3_t a) {
-	align dig_t t0[2 * FP_DIGS], t1[2 * FP_DIGS], t2[2 * FP_DIGS];
-	align dig_t t3[2 * FP_DIGS], t4[2 * FP_DIGS], t5[2 * FP_DIGS];
+	dig_t t0[2 * FP_DIGS], t1[2 * FP_DIGS], t2[2 * FP_DIGS];
+	dig_t t3[2 * FP_DIGS], t4[2 * FP_DIGS], t5[2 * FP_DIGS];
 
 	/* t0 = a_0^2. */
 	fp_sqrn_low(t0, a[0]);
@@ -93,7 +93,7 @@ void fp3_sqrn_low(dv3_t c, fp3_t a) {
 }
 
 void fp3_sqrm_low(fp3_t c, fp3_t a) {
-	align dv3_t t;
+	dv3_t t;
 
 	dv3_null(t);
 

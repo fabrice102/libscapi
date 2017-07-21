@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2013 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -25,7 +25,6 @@
  *
  * Implementation of the low-level prime field multiplication functions.
  *
- * @version $Id: relic_fp_mul_low.c 1108 2012-03-11 21:45:01Z dfaranha $
  * @ingroup fp
  */
 
@@ -45,7 +44,7 @@
  * @param[in] A				- the first digit to multiply.
  * @param[in] B				- the second digit to multiply.
  */
-#define COMBA_STEP(R2, R1, R0, A, B)										\
+#define COMBA_STEP_FP_MUL_LOW(R2, R1, R0, A, B)								\
 	dbl_t r = (dbl_t)(A) * (dbl_t)(B);										\
 	dig_t _r = (R1);														\
 	(R0) += (dig_t)(r);														\
@@ -94,39 +93,8 @@ dig_t fp_mul1_low(dig_t *c, const dig_t *a, dig_t digit) {
 	return carry;
 }
 
-/*
-void fp_muln_low(dig_t *c, dig_t *a, dig_t *b) {
-	int i, j;
-	dig_t *tmpa, *tmpb, r0, r1, r2;
-
-	r0 = r1 = r2 = 0;
-	for (i = 0; i < FP_DIGS; i++, c++) {
-		tmpa = a;
-		tmpb = b + i;
-		for (j = 0; j <= i; j++, tmpa++, tmpb--) {
-			COMBA_STEP(r2, r1, r0, *tmpa, *tmpb);
-		}
-		*c = r0;
-		r0 = r1;
-		r1 = r2;
-		r2 = 0;
-	}
-	for (i = 0; i < FP_DIGS; i++, c++) {
-		tmpa = a + i + 1;
-		tmpb = b + (FP_DIGS - 1);
-		for (j = 0; j < FP_DIGS - (i + 1); j++, tmpa++, tmpb--) {
-			COMBA_STEP(r2, r1, r0, *tmpa, *tmpb);
-		}
-		*c = r0;
-		r0 = r1;
-		r1 = r2;
-		r2 = 0;
-	}
-}
-*/
-
 void fp_mulm_low(dig_t *c, const dig_t *a, const dig_t *b) {
-	dig_t align t[2 * FP_DIGS];
+	relic_align dig_t t[2 * FP_DIGS];
 
 	fp_muln_low(t, a, b);
 	fp_rdc(c, t);

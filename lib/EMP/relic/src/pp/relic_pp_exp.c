@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -265,9 +265,12 @@ void pp_exp_k12(fp12_t c, fp12_t a) {
 		case BN_P158:
 		case BN_P254:
 		case BN_P256:
+		case BN_P382:
 		case BN_P638:
 			pp_exp_bn(c, a);
 			break;
+		case B12_P381:
+		case B12_P455:
 		case B12_P638:
 			pp_exp_b12(c, a);
 			break;

@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -29,7 +29,6 @@
  */
 
 #include "relic_core.h"
-#include "relic_eb.h"
 
 /*============================================================================*/
 /* Private definitions                                                        */
@@ -199,7 +198,7 @@ void eb_mul_fix_basic(eb_t r, const eb_t *t, const bn_t k) {
 #if EB_FIX == YAOWI || !defined(STRIP)
 
 void eb_mul_pre_yaowi(eb_t *t, const eb_t p) {
-	int l;
+	int i, l;
 	bn_t n;
 
 	bn_null(n);
@@ -211,7 +210,7 @@ void eb_mul_pre_yaowi(eb_t *t, const eb_t p) {
 		l = CEIL(bn_bits(n), EB_DEPTH);
 
 		eb_copy(t[0], p);
-		for (int i = 1; i < l; i++) {
+		for (i = 1; i < l; i++) {
 			eb_dbl(t[i], t[i - 1]);
 			for (int j = 1; j < EB_DEPTH; j++) {
 				eb_dbl(t[i], t[i]);

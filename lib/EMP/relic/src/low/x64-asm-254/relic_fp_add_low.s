@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -34,33 +34,33 @@
 #include "macro.s"
 
 .text
-.global fp_add1_low
-.global fp_addn_low
-.global fp_addm_low
-.global fp_addd_low
-.global fp_addc_low
-.global fp_sub1_low
-.global fp_subn_low
-.global fp_subm_low
-.global fp_subc_low
-.global fp_subd_low
-.global fp_negm_low
-.global fp_dbln_low
-.global fp_dblm_low
-.global fp_hlvm_low
-.global fp_hlvd_low
+.global cdecl(fp_add1_low)
+.global cdecl(fp_addn_low)
+.global cdecl(fp_addm_low)
+.global cdecl(fp_addd_low)
+.global cdecl(fp_addc_low)
+.global cdecl(fp_sub1_low)
+.global cdecl(fp_subn_low)
+.global cdecl(fp_subm_low)
+.global cdecl(fp_subc_low)
+.global cdecl(fp_subd_low)
+.global cdecl(fp_negm_low)
+.global cdecl(fp_dbln_low)
+.global cdecl(fp_dblm_low)
+.global cdecl(fp_hlvm_low)
+.global cdecl(fp_hlvd_low)
 
 /*
  * Function: fp_add1_low
  * Inputs: rdi = c, rsi = a, rdx = digit
  * Output: rax
  */
-fp_add1_low:
+cdecl(fp_add1_low):
 	movq	0(%rsi), %r10
 	addq	%rdx, %r10
 	movq	%r10, 0(%rdi)
 
-	ADD1_STEP 1 (FP_DIGS - 1)
+	ADD1_STEP 1, (FP_DIGS - 1)
 
 	ret
 
@@ -69,12 +69,12 @@ fp_add1_low:
  * Inputs: rdi = c, rsi = a, rdx = b
  * Output: rax
  */
-fp_addn_low:
+cdecl(fp_addn_low):
 	movq	0(%rdx), %r11
 	addq	0(%rsi), %r11
 	movq	%r11, 0(%rdi)
 
-	ADDN_STEP 1 (FP_DIGS - 1)
+	ADDN_STEP 1, (FP_DIGS - 1)
 
 	xorq	%rax, %rax
 
@@ -85,7 +85,7 @@ fp_addn_low:
  * Inputs: rdi = c, rsi = a, rdx = b
  * Output: (a+b) mod p
  */
-fp_addm_low:
+cdecl(fp_addm_low):
 	push	%r12
 	movq	0(%rdx), %r8
 	addq	0(%rsi), %r8
@@ -124,16 +124,16 @@ fp_addm_low:
 	pop		%r12
 	ret
 
-fp_addd_low:
+cdecl(fp_addd_low):
 	movq	0(%rdx), %r11
 	addq	0(%rsi), %r11
 	movq	%r11, 0(%rdi)
 
-	ADDN_STEP 1 (2 * FP_DIGS - 1)
+	ADDN_STEP 1, (2 * FP_DIGS - 1)
 
 	ret
 
-fp_addc_low:
+cdecl(fp_addc_low):
 	push    %r12
 	push    %r13
 	push    %r14
@@ -170,10 +170,10 @@ fp_addc_low:
 	sbbq    %rax,%r10
 	movq    P3,%rax
 	sbbq    %rax,%r11
-    cmovc   %r12, %r8
-    cmovc   %r13, %r9
-    cmovc   %r14, %r10
-    cmovc   %rcx, %r11
+	cmovc   %r12, %r8
+	cmovc   %r13, %r9
+	cmovc   %r14, %r10
+	cmovc   %rcx, %r11
 	movq    %r8,32(%rdi)
 	movq    %r9,40(%rdi)
 	movq    %r10,48(%rdi)
@@ -189,12 +189,12 @@ fp_addc_low:
  * Inputs: rdi = c, rsi = a, rdx = digit
  * Output: rax
  */
-fp_sub1_low:
+cdecl(fp_sub1_low):
 	movq	0(%rsi),%r10
 	subq	%rdx, %r10
 	movq	%r10,0(%rdi)
 
-	SUB1_STEP 1 (FP_DIGS - 1)
+	SUB1_STEP 1, (FP_DIGS - 1)
 
 	ret
 
@@ -203,19 +203,19 @@ fp_sub1_low:
  * Inputs: rdi = c, rsi = a, rdx = b
  * Output: rax
  */
-fp_subn_low:
+cdecl(fp_subn_low):
 	xorq	%rax, %rax
 	movq	0(%rsi), %r11
 	subq	0(%rdx), %r11
 	movq	%r11, 0(%rdi)
 
-	SUBN_STEP 1 (FP_DIGS - 1)
+	SUBN_STEP 1, (FP_DIGS - 1)
 
 	adcq	$0, %rax
 
 	ret
 
-fp_subm_low:
+cdecl(fp_subm_low):
 	xorq	%rax,%rax
 	xorq	%rcx,%rcx
 	movq	0(%rsi), %r8
@@ -242,48 +242,48 @@ fp_subm_low:
 	cmovc	%r9, %rcx
 	cmovc	%r10, %rdx
 	cmovc	%r11, %rsi
-    addq	%rax,0(%rdi)
-    adcq	%rcx,8(%rdi)
-    adcq	%rdx,16(%rdi)
-    adcq	%rsi,24(%rdi)
+	addq	%rax,0(%rdi)
+	adcq	%rcx,8(%rdi)
+	adcq	%rdx,16(%rdi)
+	adcq	%rsi,24(%rdi)
 	ret
 
-fp_subc_low:
+cdecl(fp_subc_low):
 	xorq    %rax,%rax
 	xorq    %rcx,%rcx
 	movq    0(%rsi), %r8
 	subq    0(%rdx), %r8
 	movq    %r8, 0(%rdi)
 
-	SUBN_STEP 1 (2 * FP_DIGS - 1)
+	SUBN_STEP 1, (2 * FP_DIGS - 1)
 
 	movq	$0, %rsi
 	movq	$0, %rdx
 	movq    P0,%r8
-    movq    P1,%r9
-    movq    P2,%r10
-    movq    P3,%r11
-    cmovc   %r8, %rax
-    cmovc   %r9, %rsi
-    cmovc   %r10, %rcx
-    cmovc   %r11, %rdx
+	movq    P1,%r9
+	movq    P2,%r10
+	movq    P3,%r11
+	cmovc   %r8, %rax
+	cmovc   %r9, %rsi
+	cmovc   %r10, %rcx
+	cmovc   %r11, %rdx
 	addq    %rax,32(%rdi)
 	adcq    %rsi,40(%rdi)
 	adcq    %rcx,48(%rdi)
 	adcq    %rdx,56(%rdi)
 
-    ret
+	ret
 
-fp_subd_low:
+cdecl(fp_subd_low):
 	movq	0(%rsi), %r8
 	subq	0(%rdx), %r8
 	movq	%r8, 0(%rdi)
 
-	SUBN_STEP 1 (2 * FP_DIGS - 1)
+	SUBN_STEP 1, (2 * FP_DIGS - 1)
 
 	ret
 
-fp_negm_low:
+cdecl(fp_negm_low):
   	movq 	P0,%r8
   	subq 	0(%rsi),%r8
   	movq 	%r8,0(%rdi)
@@ -298,17 +298,17 @@ fp_negm_low:
   	movq 	%r11,24(%rdi)
   	ret
 
-fp_dbln_low:
+cdecl(fp_dbln_low):
 	movq	0(%rsi), %r8
 	addq	%r8, %r8
 	movq	%r8, 0(%rdi)
 
-	DBLN_STEP 1 (FP_DIGS - 1)
+	DBLN_STEP 1, (FP_DIGS - 1)
 
 	xorq	%rax,%rax
 	ret
 
-fp_dblm_low:
+cdecl(fp_dblm_low):
 	push	%r12
 	xorq	%rax,%rax
 	xorq	%rdx,%rdx
@@ -320,7 +320,7 @@ fp_dblm_low:
 	adcq	%r10, %r10
 	movq	24(%rsi), %r11
 	adcq	%r11, %r11
-    adcq	%rax,%rax
+	adcq	%rax,%rax
 
 	movq 	%r8, %rax
 	movq 	%r9, %rcx
@@ -349,7 +349,7 @@ fp_dblm_low:
 	pop		%r12
 	ret
 
-fp_hlvm_low:
+cdecl(fp_hlvm_low):
 	xorq	%rdx, %rdx
 	movq	P0, %r8
 	movq	P1, %r9
@@ -370,17 +370,17 @@ fp_hlvm_low:
 	movq	24(%rsi), %rdx
 	adcq	%rdx, %r11
 
-    shrd    $1, %r9, %r8
+	shrd    $1, %r9, %r8
   	movq 	%r8,0(%rdi)
-    shrd    $1, %r10, %r9
+	shrd    $1, %r10, %r9
   	movq 	%r9,8(%rdi)
-    shrd    $1, %r11, %r10
+	shrd    $1, %r11, %r10
   	movq 	%r10,16(%rdi)
-    shr     $1, %r11
+	shr     $1, %r11
   	movq 	%r11,24(%rdi)
 	ret
 
-fp_hlvd_low:
+cdecl(fp_hlvd_low):
 	xorq	%rdx, %rdx
 	movq	P0, %r8
 	movq	P1, %r9

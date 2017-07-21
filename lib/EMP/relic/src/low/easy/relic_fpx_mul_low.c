@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -38,7 +38,7 @@
 /*============================================================================*/
 
 void fp2_muln_low(dv2_t c, fp2_t a, fp2_t b) {
-	align dig_t t0[2 * FP_DIGS], t1[2 * FP_DIGS], t2[2 * FP_DIGS];
+	relic_align dig_t t0[2 * FP_DIGS], t1[2 * FP_DIGS], t2[2 * FP_DIGS];
 
 	/* Karatsuba algorithm. */
 
@@ -73,7 +73,7 @@ void fp2_muln_low(dv2_t c, fp2_t a, fp2_t b) {
 	}
 	for (int i = 0; i <= fp_prime_get_qnr(); i++) {
 		fp_addc_low(c[0], c[0], c[1]);
-	}	
+	}
 #endif
 
 	/* c_1 = t2 - t0. */
@@ -85,7 +85,7 @@ void fp2_muln_low(dv2_t c, fp2_t a, fp2_t b) {
 }
 
 void fp2_mulc_low(dv2_t c, fp2_t a, fp2_t b) {
-	align dig_t t0[2 * FP_DIGS], t1[2 * FP_DIGS], t2[2 * FP_DIGS];
+	relic_align dig_t t0[2 * FP_DIGS], t1[2 * FP_DIGS], t2[2 * FP_DIGS];
 
 	/* Karatsuba algorithm. */
 
@@ -112,7 +112,7 @@ void fp2_mulc_low(dv2_t c, fp2_t a, fp2_t b) {
 	/* t1 = u^2 * (a_1 * b_1). */
 	for (int i = 0; i <= fp_prime_get_qnr(); i++) {
 		fp_addd_low(c[0], c[0], c[1]);
-	}	
+	}
 #endif
 
 	/* c_1 = (t2 - t0). */
@@ -125,7 +125,7 @@ void fp2_mulc_low(dv2_t c, fp2_t a, fp2_t b) {
 }
 
 void fp2_mulm_low(fp2_t c, fp2_t a, fp2_t b) {
-	align dv2_t t;
+	relic_align dv2_t t;
 
 	dv2_null(t);
 
@@ -141,8 +141,8 @@ void fp2_mulm_low(fp2_t c, fp2_t a, fp2_t b) {
 }
 
 void fp3_muln_low(dv3_t c, fp3_t a, fp3_t b) {
-	align dig_t t0[2 * FP_DIGS], t1[2 * FP_DIGS], t2[2 * FP_DIGS], t3[2 * FP_DIGS];
-	align dig_t t4[2 * FP_DIGS], t5[2 * FP_DIGS], t6[2 * FP_DIGS];
+	relic_align dig_t t0[2 * FP_DIGS], t1[2 * FP_DIGS], t2[2 * FP_DIGS], t3[2 * FP_DIGS];
+	relic_align dig_t t4[2 * FP_DIGS], t5[2 * FP_DIGS], t6[2 * FP_DIGS];
 
 	/* Karatsuba algorithm. */
 

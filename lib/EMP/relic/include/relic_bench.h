@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -35,7 +35,9 @@
 #ifndef RELIC_BENCH_H
 #define RELIC_BENCH_H
 
+#include "relic_conf.h"
 #include "relic_label.h"
+#include "relic_util.h"
 
 /*============================================================================*/
 /* Constant definitions                                                       */

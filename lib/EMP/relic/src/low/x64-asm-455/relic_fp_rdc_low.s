@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2012 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -23,41 +23,52 @@
 /**
  * @file
  *
- * Implementation of the low-level multiple precision integer modular reduction
- * functions.
+ * Implementation of low-level prime field modular reduction.
  *
- * @ingroup bn
+ * @version $Id: relic_fp_add_low.c 88 2009-09-06 21:27:19Z dfaranha $
+ * @ingroup fp
  */
 
-#include <gmp.h>
-#include <string.h>
+#include "relic_fp_low.h"
 
-#include "relic_bn.h"
-#include "relic_bn_low.h"
-#include "relic_util.h"
+#include "macro.s"
 
-/*============================================================================*/
-/* Public definitions                                                         */
-/*============================================================================*/
+.data
 
-void bn_modn_low(dig_t *c, const dig_t *a, int sa, const dig_t *m, int sm,
-		dig_t u) {
-	int i;
-	dig_t r, *tmpc;
+p0: .quad 0xAAA00001800002AB
+p1: .quad 0xA6C589556B2AA956
+p2: .quad 0xB3DB9994ACE86D1B
+p3: .quad 0x4BD93954FCB314B8
+p4: .quad 0x3F665E3A5B1D5623
+p5: .quad 0xA00E0F95B4920300
+p6: .quad 0x555955557955572A
+p7: .quad 0x0000000000000055
+u0: .quad 0x4B3EF8137F4017FD
 
-	tmpc = c;
+.text
 
-	for (i = 0; i < sa; i++, tmpc++, a++) {
-		*tmpc = *a;
-	}
+.global fp_rdcn_low
 
-	tmpc = c;
+/*
+ * Function: fp_rdcn_low
+ * Inputs: rdi = c, rsi = a
+ * Output: rax
+ */
+fp_rdcn_low:
+	push	%r12
+	push	%r13
+	push	%r14
+	push	%r15
+	push 	%rbx
+	push	%rbp
+	leaq 	p0, %rbx
 
-	for (i = 0; i < sm; i++, tmpc++) {
-		r = (dig_t)(*tmpc * u);
-		*tmpc = mpn_addmul_1(tmpc, m, sm, r);
-	}
-	if (mpn_add_n(c, c, tmpc, sm)) {
-		mpn_sub_n(c, c, m, sm);
-	}
-}
+	FP_RDCN_LOW %rdi, %r8, %r9, %r10, %rsi, %rbx
+
+	pop		%rbp
+	pop		%rbx
+	pop		%r15
+	pop		%r14
+	pop		%r13
+	pop		%r12
+	ret

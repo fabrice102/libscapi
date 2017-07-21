@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -23,24 +23,47 @@
 /**
  * @file
  *
- * Implementation of the low-level multiple precision division functions.
+ * Implementation of the low-level inversion functions.
  *
- * @ingroup bn
+ * @&version $Id$
+ * @ingroup fp
  */
 
 #include <gmp.h>
 
-#include "relic_bn.h"
-#include "relic_bn_low.h"
+#include "relic_fp.h"
+#include "relic_fp_low.h"
+#include "relic_core.h"
 
 /*============================================================================*/
 /* Public definitions                                                         */
 /*============================================================================*/
 
-void bn_divn_low(dig_t *c, dig_t *d, dig_t *a, int sa, dig_t *b, int sb) {
-	mpn_tdiv_qr(c, d, 0, a, sa, b, sb);
-}
+void fp_invn_low(dig_t *c, const dig_t *a) {
+	mp_size_t cn;
+	relic_align dig_t s[FP_DIGS], t[2 * FP_DIGS], u[FP_DIGS + 1];
 
-void bn_div1_low(dig_t *c, dig_t *d, const dig_t *a, int size, dig_t b) {
-	*d = mpn_divrem_1(c, 0, a, size, b); 
+#if FP_RDC == MONTY
+	dv_zero(t + FP_DIGS, FP_DIGS);
+	dv_copy(t, a, FP_DIGS);
+	fp_rdcn_low(u, t);
+#else
+	fp_copy(u, a);
+#endif
+
+	dv_copy(s, fp_prime_get(), FP_DIGS);
+
+	mpn_gcdext(t, c, &cn, u, FP_DIGS, s, FP_DIGS);
+	if (cn < 0) {
+		dv_zero(c - cn, FP_DIGS + cn);
+		mpn_sub_n(c, fp_prime_get(), c, FP_DIGS);
+	} else {
+		dv_zero(c + cn, FP_DIGS - cn);
+	}
+
+#if FP_RDC == MONTY
+	dv_zero(t, FP_DIGS);
+	dv_copy(t + FP_DIGS, c, FP_DIGS);
+	mpn_tdiv_qr(u, c, 0, t, 2 * FP_DIGS, fp_prime_get(), FP_DIGS);
+#endif
 }

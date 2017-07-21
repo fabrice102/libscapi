@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -38,10 +38,6 @@
 /* Private definitions                                                        */
 /*============================================================================*/
 
-static const dig_t table_evens[16] = {
-	0, 1, 4, 5, 2, 3, 6, 7, 8, 9, 12, 13, 10, 11, 14, 15
-};
-
 static const dig_t table_odds[16] = {
 	0, 4, 1, 5, 8, 12, 9, 13, 2, 6, 3, 7, 10, 14, 11, 15
 };
@@ -53,7 +49,7 @@ static const dig_t table_odds[16] = {
 void fb_slvn_low(dig_t *c, const dig_t *a) {
 	int i, j, k, b, d, v[FB_BITS];
 	dig_t u, *p;
-	align dig_t s[FB_DIGS], t[FB_DIGS];
+	relic_align dig_t s[FB_DIGS], t[FB_DIGS];
 	dig_t mask;
 	const void *tab = fb_poly_get_slv();
 

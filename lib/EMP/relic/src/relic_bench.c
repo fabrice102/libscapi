@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -39,7 +39,7 @@
  * Prototype for Arduino timing function.
  *
  * @return The time in microseconds since the program began running.
- */ 
+ */
 uint32_t micros();
 #endif
 
@@ -47,7 +47,7 @@ uint32_t micros();
 /* Private definitions                                                        */
 /*============================================================================*/
 
-#if defined(OVERH) && TIMER != RELIC_NONE && BENCH > 1
+#if defined(OVERH) && defined(TIMER) && BENCH > 1
 
 /**
  * Dummy function for measuring benchmarking overhead.
@@ -58,13 +58,13 @@ static void empty(int *a) {
 	(*a)++;
 }
 
-#endif /* OVER && TIMER != RELIC_NONE && BENCH > 1 */
+#endif /* OVER && TIMER && BENCH > 1 */
 
 /*============================================================================*/
 /* Public definitions                                                         */
 /*============================================================================*/
 
-#if defined(OVERH) && TIMER != RELIC_NONE && BENCH > 1
+#if defined(OVERH) && defined(TIMER) && BENCH > 1
 
 void bench_overhead(void) {
 	ctx_t *ctx = core_get();
@@ -112,10 +112,10 @@ void bench_overhead(void) {
 	bench_print();
 }
 
-#endif /* OVER && TIMER != RELIC_NONE && BENCH > 1 */
+#endif /* OVER && TIMER && BENCH > 1 */
 
 void bench_reset() {
-#if TIMER != RELIC_NONE
+#ifdef TIMER
 	core_get()->total = 0;
 #endif
 }
@@ -157,7 +157,7 @@ void bench_after() {
   	result = (ctx->after - ctx->before);
 #endif
 
-#if TIMER != RELIC_NONE
+#ifdef TIMER
 	ctx->total += result;
 #else
 	(void)result;
@@ -167,7 +167,7 @@ void bench_after() {
 
 void bench_compute(int benches) {
 	ctx_t *ctx = core_get();
-#if TIMER != RELIC_NONE
+#ifdef TIMER
 	ctx->total = ctx->total / benches;
 #ifdef OVERH
 	ctx->total = ctx->total - ctx->over;
@@ -175,7 +175,7 @@ void bench_compute(int benches) {
 #else
 	(void)benches;
 	(void)ctx;
-#endif /* TIMER != RELIC_NONE */
+#endif /* TIMER */
 }
 
 void bench_print() {

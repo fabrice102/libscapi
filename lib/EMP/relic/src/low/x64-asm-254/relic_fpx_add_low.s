@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -26,32 +26,33 @@
 
 .text
 
-.global fp2_addn_low
-.global fp2_addm_low
-.global fp2_addd_low
-.global fp2_addc_low
-.global fp2_subn_low
-.global fp2_subm_low
-.global fp2_subd_low
-.global fp2_subc_low
-.global fp2_dbln_low
-.global fp2_dblm_low
-.global fp2_norm_low
-.global fp2_nord_low
-.global fp2_norh_low
-.global fp2_hlvm_low
+.global cdecl(fp2_addn_low)
+.global cdecl(fp2_addm_low)
+.global cdecl(fp2_addd_low)
+.global cdecl(fp2_addc_low)
+.global cdecl(fp2_addc_low)
+.global cdecl(fp2_subn_low)
+.global cdecl(fp2_subm_low)
+.global cdecl(fp2_subd_low)
+.global cdecl(fp2_subc_low)
+.global cdecl(fp2_dbln_low)
+.global cdecl(fp2_dblm_low)
+.global cdecl(fp2_norm_low)
+.global cdecl(fp2_nord_low)
+.global cdecl(fp2_norh_low)
+.global cdecl(fp2_hlvm_low)
 
 /*
  * Function: fp2_addn_low
  * Inputs: rdi = c, rsi = a, rdx = b
  * Output: rax
  */
-fp2_addn_low:
+cdecl(fp2_addn_low):
 	movq	0(%rdx), %r8
 	addq	0(%rsi), %r8
 	movq	%r8, 0(%rdi)
 
-	ADDN_STEP 1 (FP_DIGS - 1)
+	ADDN_STEP 1, (FP_DIGS - 1)
 
 	addq	$(8*FP_DIGS), %rdx
 	addq	$(8*FP_DIGS), %rsi
@@ -60,11 +61,11 @@ fp2_addn_low:
 	addq	0(%rsi), %r8
 	movq	%r8, 0(%rdi)
 
-	ADDN_STEP 1 (FP_DIGS - 1)
+	ADDN_STEP 1, (FP_DIGS - 1)
 
 	ret
 
-fp2_addm_low:
+cdecl(fp2_addm_low):
 	push	%r12
 	push	%r13
 	push	%r14
@@ -143,12 +144,12 @@ fp2_addm_low:
 	pop	%r12
 	ret
 
-fp2_addd_low:
+cdecl(fp2_addd_low):
 	movq	0(%rdx), %r8
 	addq	0(%rsi), %r8
 	movq	%r8, 0(%rdi)
 
-	ADDN_STEP 1 (2 * FP_DIGS - 1)
+	ADDN_STEP 1, (2 * FP_DIGS - 1)
 
 	addq	$(8*DV_DIGS), %rdx
 	addq	$(8*DV_DIGS), %rsi
@@ -157,11 +158,11 @@ fp2_addd_low:
 	addq	0(%rsi), %r8
 	movq	%r8, 0(%rdi)
 
-	ADDN_STEP 1 (2 * FP_DIGS - 1)
+	ADDN_STEP 1, (2 * FP_DIGS - 1)
 
 	ret
 
-fp2_addc_low:
+cdecl(fp2_addc_low):
 	push    %r12
 	push    %r13
 	push    %r14
@@ -258,7 +259,7 @@ fp2_addc_low:
 	pop	%r12
 	ret
 
-fp2_subn_low:
+cdecl(fp2_subn_low):
 	push	%r12
 	push	%r13
 	movq	0(%rsi), %r8
@@ -327,7 +328,7 @@ fp2_subn_low:
 	pop	%r12
 	ret
 
-fp2_subm_low:
+cdecl(fp2_subm_low):
 	push	%r12
 	push	%r13
 	push	%r14
@@ -399,12 +400,12 @@ fp2_subm_low:
 	pop	%r12
 	ret
 
-fp2_subd_low:
+cdecl(fp2_subd_low):
 	movq	0(%rdx), %r8
 	subq	0(%rsi), %r8
 	movq	%r8, 0(%rdi)
 
-	SUBN_STEP 1 (2 * FP_DIGS - 1)
+	SUBN_STEP 1, (2 * FP_DIGS - 1)
 
 	addq	$(8*DV_DIGS), %rdx
 	addq	$(8*DV_DIGS), %rsi
@@ -414,11 +415,11 @@ fp2_subd_low:
 	addq	0(%rsi), %r8
 	movq	%r8, 0(%rdi)
 
-	SUBN_STEP 1 (2 * FP_DIGS - 1)
+	SUBN_STEP 1, (2 * FP_DIGS - 1)
 
 	ret
 
-fp2_subc_low:
+cdecl(fp2_subc_low):
 	push	%r12
 	push	%r13
 	push	%r14
@@ -514,12 +515,12 @@ fp2_subc_low:
 	pop	%r12
 	ret
 
-fp2_dbln_low:
+cdecl(fp2_dbln_low):
 	movq	0(%rdx), %r8
 	addq	%r8, %r8
 	movq	%r8, 0(%rdi)
 
-	DBLN_STEP 1 (FP_DIGS - 1)
+	DBLN_STEP 1, (FP_DIGS - 1)
 
 	addq	$(8*FP_DIGS), %rsi
 	addq	$(8*FP_DIGS), %rdi
@@ -527,11 +528,11 @@ fp2_dbln_low:
 	addq	%r8, %r8
 	movq	%r8, 0(%rdi)
 
-	DBLN_STEP 1 (FP_DIGS - 1)
+	DBLN_STEP 1, (FP_DIGS - 1)
 
 	ret
 
-fp2_dblm_low:
+cdecl(fp2_dblm_low):
 	push	%r12
 	push	%r13
 	push	%r14
@@ -614,7 +615,7 @@ fp2_dblm_low:
 	pop	%r12
 	ret
 
-fp2_norm_low:
+cdecl(fp2_norm_low):
 	push	%r12
 	push	%r13
 	push	%r14
@@ -687,7 +688,7 @@ fp2_norm_low:
 
 	ret
 
-fp2_nord_low:
+cdecl(fp2_nord_low):
 	push	%r12
 	push	%r13
 	push	%r14
@@ -782,7 +783,7 @@ fp2_nord_low:
 
 	ret
 
-fp2_norh_low:		
+cdecl(fp2_norh_low):
 	movq    0(%rsi), %r8
 	addq    8*DV_DIGS(%rsi), %r8
 	movq    %r8, 8*DV_DIGS(%rdi)
@@ -846,7 +847,7 @@ fp2_norh_low:
 
 	ret
 
-fp2_hlvm_low:
+cdecl(fp2_hlvm_low):
 	xorq	%rdx, %rdx
 	movq	P0, %r8
 	movq	P1, %r9

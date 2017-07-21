@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -76,7 +76,7 @@ dig_t fp_mula_low(dig_t *c, const dig_t *a, dig_t digit) {
 }
 
 void fp_mulm_low(dig_t *c, const dig_t *a, const dig_t *b) {
-	dig_t align t[2 * FP_DIGS];
+	dig_t relic_align t[2 * FP_DIGS];
 
 	fp_muln_low(t, a, b);
 	fp_rdc(c, t);

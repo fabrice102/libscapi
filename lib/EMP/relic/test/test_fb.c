@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -158,7 +158,7 @@ static int util(void) {
 			fb_set_dig(a, d);
 			TEST_ASSERT(fb_cmp_dig(a, d) == CMP_EQ, end);
 		}
-		TEST_END;		
+		TEST_END;
 
 		bits = 0;
 		TEST_BEGIN("bit setting and getting are consistent") {
@@ -517,11 +517,11 @@ static int squaring(void) {
 		} TEST_END;
 #endif
 
-#if FB_SQR == RELIC_TABLE || !defined(STRIP)
+#if FB_SQR == LUTBL || !defined(STRIP)
 		TEST_BEGIN("table squaring is correct") {
 			fb_rand(a);
 			fb_sqr(b, a);
-			fb_sqr_table(c, a);
+			fb_sqr_lutbl(c, a);
 			TEST_ASSERT(fb_cmp(b, c) == CMP_EQ, end);
 		} TEST_END;
 #endif
@@ -988,7 +988,7 @@ static int exponentiation(void) {
 		bn_new(d);
 
 		TEST_BEGIN("exponentiation is correct") {
-			fb_rand(a);			
+			fb_rand(a);
 			bn_zero(d);
 			fb_exp(c, a, d);
 			TEST_ASSERT(fb_cmp_dig(c, 1) == CMP_EQ, end);

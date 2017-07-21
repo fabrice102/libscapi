@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -22,19 +22,13 @@
 
 #include "relic_fp_low.h"
 
-/**
- * @file
- *
- * Implementation of the low-level prime field addition and subtraction
- * functions.
- *
- * @ingroup fp
- */
+#include "macro.s"
 
 .text
-.global fp_rsh1_low
+.global cdecl(fp_rsh1_low)
+.global cdecl(fp_lsh1_low)
 
-fp_rsh1_low:
+cdecl(fp_rsh1_low):
 	movq	0(%rsi), %r8
 	movq	8(%rsi), %r9
 	movq	16(%rsi), %r10
@@ -42,24 +36,26 @@ fp_rsh1_low:
 	shrd	$1, %r9, %r8
 	shrd	$1, %r10, %r9
 	shrd	$1, %r11, %r10
-	shr		$1, %r11
+	shr	$1, %r11
 	movq	%r8,0(%rdi)
 	movq	%r9,8(%rdi)
 	movq	%r10,16(%rdi)
 	movq	%r11,24(%rdi)
 	ret
 
+cdecl(fp_lsh1_low):
 fp_lsh1_low:
-	movq	0(%rsi), %r8
-	movq	8(%rsi), %r9
-	movq	16(%rsi), %r10
-	movq	24(%rsi), %r11
-	shld	$1, %r9, %r8
-	shld	$1, %r10, %r9
-	shld	$1, %r11, %r10
-	shl		$1, %r11
-	movq	%r8,0(%rdi)
-	movq	%r9,8(%rdi)
-	movq	%r10,16(%rdi)
-	movq	%r11,24(%rdi)
-	ret
+        movq    0(%rsi), %r8
+        movq    8(%rsi), %r9
+        movq    16(%rsi), %r10
+        movq    24(%rsi), %r11
+        shld    $1, %r10, %r11
+        shld    $1, %r9, %r10
+        shld    $1, %r8, %r9
+        shl     $1, %r8
+        movq    %r8,0(%rdi)
+        movq    %r9,8(%rdi)
+        movq    %r10,16(%rdi)
+        movq    %r11,24(%rdi)
+        xorq    %rax, %rax
+        ret

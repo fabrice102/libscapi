@@ -1,6 +1,6 @@
 /*
  * RELIC is an Efficient LIbrary for Cryptography
- * Copyright (C) 2007-2015 RELIC Authors
+ * Copyright (C) 2007-2017 RELIC Authors
  *
  * This file is part of RELIC. RELIC is legal property of its developers,
  * whose names are not listed here. Please refer to the COPYRIGHT file
@@ -85,7 +85,7 @@
  * Represents a temporary double-precision digit vector.
  */
 #if ALLOC == AUTO
-typedef align dig_t dv_t[DV_DIGS + PADDING(DV_BYTES)/(DIGIT / 8)];
+typedef relic_align dig_t dv_t[DV_DIGS + PADDING(DV_BYTES)/(DIGIT / 8)];
 #else
 typedef dig_t *dv_t;
 #endif

@@ -24,7 +24,10 @@ LIBMIRACL = $(prefix)/lib/libmiracl.a
 
 LIBRARIES=$(INCLUDE_ARCHIVES_START) -lpthread -lssl $(LIBMIRACL) -lcrypto 
 ifeq ($(uname_S),Darwin) # bugfix in mac os x
+ifneq ("$(wildcard /usr/local/Cellar/gcc49/4.9.1/lib/gcc/x86_64-apple-darwin13.3.0/4.9.1/libstdc++.a)","")
+	# if the file exists
 	LIBRARIES += /usr/local/Cellar/gcc49/4.9.1/lib/gcc/x86_64-apple-darwin13.3.0/4.9.1/libstdc++.a
+endif
 endif
 LIBRARIES += $(INCLUDE_ARCHIVES_END) #-lgmp -lgmpxx
 

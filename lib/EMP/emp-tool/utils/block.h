@@ -66,6 +66,12 @@ inline void xorBlocks_arr(block* res, const block* x, block y, int nblocks) {
 		*(res++) = xorBlocks(*(x++), y);	
 	}
 }
+inline void xorBlocks_arr2(block* res, const block* x, const block* y, int nblocks) {
+	const block * dest = nblocks+x;
+	for (; x != dest;) {
+		*(res++) = xorBlocks(*(x++), *(y++));	
+	}
+}
 
 inline bool cmpBlock(const block * x, const block * y, int nblocks) {
 	const block * dest = nblocks+x;

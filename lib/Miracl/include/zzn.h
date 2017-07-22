@@ -200,6 +200,10 @@ public:
 #endif
     }
 };
+
+// Forward Declaration for friend declaration to allow definition in cpp.
+ZZn luc(const ZZn&, const Big&, ZZn* b3=NULL);
+
 #ifndef MR_NO_RAND
 extern ZZn randn(void);  
 #endif
@@ -208,6 +212,3 @@ extern ZZn getB(void);
 extern ZZn one(void);
 
 #endif
-
-// Forward Declaration for friend declaration to allow definition in cpp.
-ZZn luc(const ZZn&, const Big&, ZZn* b3=NULL);

@@ -812,7 +812,7 @@ BOOL Mal_OTExtensionSender::OTSenderRoutine(int id, int myNumOTs)
 
 	for(int i = 0; i < numsndvals; i++)
 		vSnd[i].delCBitVector();
-	if(numsndvals > 0)	free(vSnd);
+	if(numsndvals > 0)	delete[] vSnd;
 
 #ifdef OTTiming
 	cerr << "Sender time benchmark for performing " << myNumOTs << " OTs on " << m_nBitLength << " bit strings" << endl;
